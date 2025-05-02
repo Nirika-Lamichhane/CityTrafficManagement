@@ -1,29 +1,51 @@
-import heapq  # imports heap queue i.e. priority queue i.e. used to allow us to access the smallest and largest distance during the search
+import heapq  # imports heap queue i.e. priority queue to get the smallest distance
 from city_map import city_map
 
-def dijkstra(start, end):
-    distances = {node: float('inf') for node in city_map}  # Initialize distances to infinity
-    distances[start] = 0  # Start node distance is 0
-    pq = [(0, start)]  # Priority queue initialized with the start node (distance, node)
-    visited = set()  # Set to track visited nodes
-    previous = {node: None for node in city_map}  # Dictionary to keep track of the previous node in the shortest path
-    
-    while pq:
-        current_distance, current_node = heapq.heappop(pq)  # Pop the node with the smallest distance
+def dijkstra(start, end, mode='distance'):
+    distances = {node: float('inf') for node in city_map}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    previous = {node: None for node in city_map}
 
-        if current_node in visited:  # Skip if the node has already been visited
+    while pq:
+        current_distance, current_node = heapq.heappop(pq)
+        if current_node in visited:
             continue
         visited.add(current_node)
 
-        if current_node == end:  # If we reach the end node, stop the algorithm
+        if current_node == end:
             break
 
-        # Loop through the neighbors of the current node
-        for neighbor, weight in city_map[current_node].items():
-            distance = current_distance + weight  # Calculate new distance to the neighbor
-
-            # If the new distance is shorter, update the distance and push to the priority queue
-            if distance < distances[neighbor]:
-                distances[neighbor] = distance
+        for neighbor, (time, distance) in city_map[current_node]:
+            weight = distance if mode == 'distance' else time
+            total = current_distance + weight
+            if total < distances[neighbor]:
+                distances[neighbor] = total
                 previous[neighbor] = current_node
-                heapq.heappush(pq, (distance, neighbor))  # Push the neighbor with the updated distance to the priority queue
+                heapq.heappush(pq, (total, neighbor))
+
+    # Reconstruct path
+    path = []
+    current = end
+    while current:
+        path.insert(0, current)
+        current = previous[current]
+
+    return path, distances[end]
+
+if __name__ == "__main__":
+    # this line makes this code snippet under this run only when it is called directly from this file but not imported
+    
+    print("Available cities:", ", ".join(city_map.keys()))
+    start_node = input("Enter starting location: ")
+    end_node = input("Enter destination: ")
+    mode = input("Optimize for 'distance' or 'time': ").lower()
+
+    if start_node in city_map and end_node in city_map:
+        path, cost = dijkstra(start_node, end_node, mode)
+        print(f"\nShortest path from {start_node} to {end_node}:")
+        print(" -> ".join(path))
+        print(f"Total {mode}: {round(cost, 2)} {'km' if mode == 'distance' else 'minutes'}")
+    else:
+        print("Invalid city names entered.")
