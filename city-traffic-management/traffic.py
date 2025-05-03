@@ -5,7 +5,7 @@ use_real_api=False
 
 def get_mock_traffic_status(origin,destination):
     traffic_levels=["low","medium","high"]   
-    traffic=random.choice(traffic_levels,weights=[0.4,0.4,0.2])[0]
+    traffic=random.choices(traffic_levels,weights=[0.4,0.4,0.2])[0]
     
     return {
     "origin": origin,
@@ -29,3 +29,36 @@ def get_real_traffic_status(origin, destination):
         "destination": destination,
         "key": api_key
     }
+
+    try:
+        # Make the API call to Google Maps Directions API
+        response = requests.get(url, params=params)
+        data = response.json()
+        
+        if data["status"] == "OK":
+            # Extract the estimated travel time (ETA)
+            duration = data["routes"][0]["legs"][0]["duration"]["text"]
+            return {
+                "origin": origin,
+                "destination": destination,
+                "traffic_level": f"Real-time (ETA: {duration})"
+            }
+        else:
+            return {
+                "origin": origin,
+                "destination": destination,
+                "traffic_level": "unknown (API error)"
+            }
+    except Exception as e:
+        return {
+            "origin": origin,
+            "destination": destination,
+            "traffic_level": f"error: {str(e)}"
+        }
+
+# ✅ Unified Traffic Status Function (mock or real)
+def get_traffic_status(origin, destination):
+    if use_real_api:
+        return get_real_traffic_status(origin, destination)
+    else:
+        return get_mock_traffic_status(origin, destination)
