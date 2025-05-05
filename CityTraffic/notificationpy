@@ -1,0 +1,18 @@
+from plyer import notification
+import time
+import random
+from city_map import city_map
+
+def send_traffic_notification():
+    cities = list(city_map.keys())  # Extract city names from keys
+    origin, destination = random.sample(cities, 2)
+
+    traffic_status = random.choice(['Low', 'Medium', 'High'])
+
+    notification.notify(
+        title=f"Traffic Update: {origin} to {destination}",
+        message=f"Traffic status: {traffic_status}",
+        timeout=10
+    )
+
+    time.sleep(7200)
