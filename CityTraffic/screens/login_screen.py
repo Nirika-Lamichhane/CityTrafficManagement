@@ -42,7 +42,7 @@ class LoginScreen(Screen):
     def login(self):
         username = self.ids.username.text
         password = self.ids.password.text
-        if username == "admin" and password == "123":
+        if username == "admins" and password == "123":
             print("Login successful!")
             self.manager.current = "dashboard"
         else:
