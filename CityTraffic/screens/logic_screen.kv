@@ -1,0 +1,69 @@
+<LoginScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: [50, 40]
+        spacing: 20
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.95, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Image:
+            source: 'assets/icons.jpg'
+            size_hint_y: None
+            height: 220
+            allow_stretch: True
+            keep_ratio: True
+
+        Label:
+            text: "City Traffic Management"
+            font_size: 28
+            color: 0.1,0.1,0.1,1
+            size_hint_y: None
+            height: 50
+        
+        Widget:
+            size_hint_y:None
+            height: 20 
+
+        TextInput:
+            id: username
+            hint_text: "Username"
+            background_normal: ''
+            background_active: ''
+            background_color: 0.9, 0.9, 0.9, 1
+            foreground_color: 0.1, 0.1, 0.1, 1
+            padding: 15
+            size_hint_y: None
+            height: 50
+            multiline: False
+
+        TextInput:
+            id: password
+            hint_text: "Password"
+            password: True
+            background_normal: ''
+            background_active: ''
+            background_color: 0.9, 0.9, 0.9, 1
+            foreground_color: 0.1, 0.1, 0.1, 1
+            padding: 15
+            size_hint_y: None
+            height: 50
+            multiline: False
+
+        Widget:
+            size_hint_y:None
+            height: 20
+
+
+        Button:
+            text: "Login"
+            size_hint_y: None
+            height: 50
+            background_normal: ''
+            background_color: 0.3, 0.7, 0.9, 1
+            color: 1, 1, 1, 1
+            font_size: 18
+            on_release: root.login()
