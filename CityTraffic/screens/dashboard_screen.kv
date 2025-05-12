@@ -9,64 +9,87 @@
             width: dp(180)
             padding: dp(10)
             spacing: dp(15)
+
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1  # White color (R, G, B, A)
+                    rgba: 1, 1, 1, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
 
-            # Setting buttons to stretch equally across the available space
             Button:
                 text: "Check Traffic"
-                size_hint_y: 1  # Stretch vertically
+                size_hint_y: 1
+                background_color: 0.68, 0.85, 0.90, 1
+                background_normal: ''
+                color: 0, 0, 0, 1
+                font_size: '18sp'
                 on_press: root.on_check_traffic()
-                
 
             Button:
                 text: "Shortest Path"
-                size_hint_y: 1  # Stretch vertically
+                size_hint_y: 1
+                background_color: 0.68, 0.85, 0.90, 1
+                background_normal: ''
+                color: 0, 0, 0, 1
+                font_size: '18sp'
                 on_press: root.on_shortest_path()
 
             Button:
                 text: "Alternative Routes"
-                size_hint_y: 1  # Stretch vertically
+                size_hint_y: 1
+                background_color: 0.68, 0.85, 0.90, 1
+                background_normal: ''
+                color: 0, 0, 0, 1
+                font_size: '18sp'
 
             Button:
                 text: "Traffic Data"
-                size_hint_y: 1  # Stretch vertically
+                size_hint_y: 1
+                background_color: 0.68, 0.85, 0.90, 1
+                background_normal: ''
+                color: 0, 0, 0, 1
+                font_size: '18sp'
 
-        # Main Content Area (Label, Image, Bottom Text)
+        # Main Content Area
         BoxLayout:
             orientation: 'vertical'
             padding: dp(20)
-            spacing: dp(20)
 
-            Label:
-                text: "Welcome to the Dashboard"
-                font_size: '24sp'
-                bold: True
-                halign: 'center'
-                valign: 'middle'
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            BoxLayout:
+                orientation: 'vertical'
                 size_hint_y: None
-                height: dp(50)
-                text_size: self.width, None
-                color: 0.1, 0.1, 0.1, 1
+                height: self.minimum_height
 
-            Image:
-                source: 'assets/traffic.jpg'
-                size_hint: None, None
-                size: dp(300), dp(200)
-                allow_stretch: True
-                keep_ratio: True
-                pos_hint: {'center_x': 0.5}
+                Image:
+                    source: 'assets/traffic.jpg'
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: dp(200)
+                    allow_stretch: True
+                    keep_ratio: True
 
-            Label:
-                text: "Status: Up to date\nNo congestion reported."
-                font_size: '16sp'
-                halign: 'center'
-                valign: 'middle'
-                size_hint_y: None
-                height: self.texture_size[1] + dp(20)
-                text_size: self.width, None
-                color: 0.2, 0.2, 0.2, 1
+                Label:
+                    text: "Welcome to the Dashboard"
+                    font_size: '30sp'
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: None
+                    height: dp(60)
+                    text_size: self.width, None
+                    color: 0.1, 0.1, 0.1, 1
+
+                Image:
+                    source: 'assets/shortest.jpg'
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: dp(200)
+                    allow_stretch: True
+                    keep_ratio: True
