@@ -55,7 +55,7 @@
         BoxLayout:
             orientation: 'vertical'
             padding: dp(20)
-
+            spacing: dp(10)
             canvas.before:
                 Color:
                     rgba: 1, 1, 1, 1
@@ -63,33 +63,53 @@
                     pos: self.pos
                     size: self.size
 
-            BoxLayout:
-                orientation: 'vertical'
+            Label:
+                text: "Welcome to the Dashboard"
+                font_size: '30sp'
+                halign: 'center'
+                valign: 'middle'
                 size_hint_y: None
-                height: self.minimum_height
+                height: dp(60)
+                text_size: self.width, None
+                color: 0.1, 0.1, 0.1, 1
+                canvas.before:
+                    Color:
+                        rgba: 1.5, 1.5, 1.5, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+               
 
-                Image:
-                    source: 'assets/traffic.jpg'
-                    size_hint_x: 1
-                    size_hint_y: None
-                    height: dp(200)
-                    allow_stretch: True
-                    keep_ratio: True
+            # Add a spacer before the first image
+            Widget:
+                size_hint_y: 1
 
-                Label:
-                    text: "Welcome to the Dashboard"
-                    font_size: '30sp'
-                    halign: 'center'
-                    valign: 'middle'
-                    size_hint_y: None
-                    height: dp(60)
-                    text_size: self.width, None
-                    color: 0.1, 0.1, 0.1, 1
+            Image:
+                source: 'assets/traffic.jpg'
+                size_hint_x: 1
+                size_hint_y: None
+                height: dp(200)
+                allow_stretch: True
+                keep_ratio: True
 
-                Image:
-                    source: 'assets/shortest.jpg'
-                    size_hint_x: 1
-                    size_hint_y: None
-                    height: dp(200)
-                    allow_stretch: True
-                    keep_ratio: True
+            Label:
+                text: "The solution for all cities!!."
+                font_size: '30sp'
+                halign: 'center'
+                valign: 'middle'
+                size_hint_y: None
+                height: dp(60)
+                text_size: self.width, None
+                color: 0.1, 0.1, 0.1, 1
+
+            Image:
+                source: 'assets/shortest.jpg'
+                size_hint_x: 1
+                size_hint_y: None
+                height: dp(200)
+                allow_stretch: True
+                keep_ratio: True
+
+            # Add a spacer after the last image
+            Widget:
+                size_hint_y: 1
