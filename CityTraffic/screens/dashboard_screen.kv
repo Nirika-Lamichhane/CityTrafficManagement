@@ -1,0 +1,72 @@
+<DashboardScreen>:
+    BoxLayout:
+        orientation: 'horizontal'
+
+        # Left Side Buttons
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: None
+            width: dp(180)
+            padding: dp(10)
+            spacing: dp(15)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # White color (R, G, B, A)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # Setting buttons to stretch equally across the available space
+            Button:
+                text: "Check Traffic"
+                size_hint_y: 1  # Stretch vertically
+                on_press: root.on_check_traffic()
+                
+
+            Button:
+                text: "Shortest Path"
+                size_hint_y: 1  # Stretch vertically
+                on_press: root.on_shortest_path()
+
+            Button:
+                text: "Alternative Routes"
+                size_hint_y: 1  # Stretch vertically
+
+            Button:
+                text: "Traffic Data"
+                size_hint_y: 1  # Stretch vertically
+
+        # Main Content Area (Label, Image, Bottom Text)
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            spacing: dp(20)
+
+            Label:
+                text: "Welcome to the Dashboard"
+                font_size: '24sp'
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                size_hint_y: None
+                height: dp(50)
+                text_size: self.width, None
+                color: 0.1, 0.1, 0.1, 1
+
+            Image:
+                source: 'assets/traffic.jpg'
+                size_hint: None, None
+                size: dp(300), dp(200)
+                allow_stretch: True
+                keep_ratio: True
+                pos_hint: {'center_x': 0.5}
+
+            Label:
+                text: "Status: Up to date\nNo congestion reported."
+                font_size: '16sp'
+                halign: 'center'
+                valign: 'middle'
+                size_hint_y: None
+                height: self.texture_size[1] + dp(20)
+                text_size: self.width, None
+                color: 0.2, 0.2, 0.2, 1

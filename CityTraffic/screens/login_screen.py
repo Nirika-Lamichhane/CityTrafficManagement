@@ -44,6 +44,6 @@ class LoginScreen(Screen):
         password = self.ids.password.text
         if username == "admins" and password == "123":
             print("Login successful!")
-            self.manager.current = "dashboard"
+            self.manager.current = "dashboard" #switch to the dashbard screen
         else:
             print("Invalid credentials")

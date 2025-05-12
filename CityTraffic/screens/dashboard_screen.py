@@ -1,18 +1,20 @@
 from kivy.uix.screenmanager import Screen
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
+from kivy.lang import Builder
 
-class DashboardScreen(Screen):
+# Load the corresponding .kv file for this screen
+Builder.load_file('screens/dashboard_screen.kv')
+
+class DashboardScreen(Screen): #subclass of screen later used as a custom screen class in kv file
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        layout = BoxLayout(orientation='vertical')
+        # The layout is handled by the .kv file, so no need to add widgets here.
 
-        check_traffic_button = Button(text="Check Traffic")
-        check_traffic_button.bind(on_press=self.on_check_traffic)
-        layout.add_widget(check_traffic_button)
+    def on_check_traffic(self):
+        # Replace with your actual logic for checking traffic
+        self.ids.content_label.text = "Checking traffic status..."
+        print("Checking traffic status...")  # Simulate checking traffic
 
-        self.add_widget(layout)
-
-    def on_check_traffic(self, instance):
-        # For now, just print something (you can replace this with actual traffic checking logic)
-        print("Checking traffic status...")  # Later add your code to display traffic and alternative routes
+    def on_shortest_path(self):
+        # Replace with your logic to show the shortest path
+        self.ids.content_label.text = "Showing shortest path..."
+        print("Showing shortest path...")  # Simulate shortest path calculation
