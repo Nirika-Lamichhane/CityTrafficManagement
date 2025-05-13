@@ -2,7 +2,7 @@
     BoxLayout:
         orientation: 'horizontal'
 
-        # Left Side Buttons
+        # Sidebar
         BoxLayout:
             orientation: 'vertical'
             size_hint_x: None
@@ -56,6 +56,7 @@
             orientation: 'vertical'
             padding: dp(20)
             spacing: dp(10)
+
             canvas.before:
                 Color:
                     rgba: 1, 1, 1, 1
@@ -78,16 +79,14 @@
                     Rectangle:
                         pos: self.pos
                         size: self.size
-               
 
-            # Add a spacer before the first image
             Widget:
                 size_hint_y: 1
 
+            # First Image
             Image:
                 source: 'assets/traffic.jpg'
-                size_hint_x: 1
-                size_hint_y: None
+                size_hint: (1, None)
                 height: dp(200)
                 allow_stretch: True
                 keep_ratio: True
@@ -102,14 +101,13 @@
                 text_size: self.width, None
                 color: 0.1, 0.1, 0.1, 1
 
+            # Second Image
             Image:
                 source: 'assets/shortest.jpg'
-                size_hint_x: 1
-                size_hint_y: None
+                size_hint: (1, None)
                 height: dp(200)
                 allow_stretch: True
                 keep_ratio: True
 
-            # Add a spacer after the last image
             Widget:
                 size_hint_y: 1

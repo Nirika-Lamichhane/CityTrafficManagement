@@ -11,7 +11,7 @@ def get_mock_traffic_status(origin,destination):
     "origin": origin,
     "destination": destination,
     "traffic_level": traffic
-   }
+    }
 '''
 here weights haru le chai low medioum high ko probabilty dine ho kun chai ranfom le kasari select garca vabera
 ani [0] le chai hamlai value chaine ho list haina so esle chai output lai value ko rup ma dekhauxa not list so used
