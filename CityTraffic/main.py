@@ -4,6 +4,7 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 from screens.login_screen import LoginScreen
 from screens.dashboard_screen import DashboardScreen
+from screens.checktraffic import CheckTrafficScreen
 
 class CityTrafficApp(App): # class that inherits from app class 
 
@@ -11,6 +12,7 @@ class CityTrafficApp(App): # class that inherits from app class
         sm = ScreenManager()
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(DashboardScreen(name='dashboard'))
+        sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
         return sm
 if __name__ == '__main__':
      CityTrafficApp().run()
