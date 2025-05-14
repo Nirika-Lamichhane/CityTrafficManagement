@@ -10,11 +10,10 @@ class DashboardScreen(Screen): #subclass of screen later used as a custom screen
         # The layout is handled by the .kv file, so no need to add widgets here.
 
     def on_check_traffic(self):
+        origin = self.ids.origin_input.text
+        destination = self.ids.destination_input.text
         # Replace with your actual logic for checking traffic
         self.ids.content_label.text = "Checking traffic status..."
-        print("Checking traffic status...")  # Simulate checking traffic
+        print(f"Checking traffic status ftom {origin} to {destination}...")  # Simulate checking traffic
 
-    def on_shortest_path(self):
-        # Replace with your logic to show the shortest path
-        self.ids.content_label.text = "Showing shortest path..."
-        print("Showing shortest path...")  # Simulate shortest path calculation
+   

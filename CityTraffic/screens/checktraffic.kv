@@ -1,50 +1,49 @@
-# check_traffic_screen.kv
-
-<CheckTrafficScreen>:
-    name: 'check_traffic'
-
+<DashboardScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 10
 
-        Label:
-            text: "Check Traffic Status"
-            font_size: '24sp'
+        # Header section for origin and destination inputs
+        BoxLayout:
             size_hint_y: None
-            height: self.texture_size[1]
+            height: '50dp'
+            orientation: 'horizontal'
 
-        TextInput:
-            id: origin_input
-            hint_text: "Enter Origin"
-            multiline: False
-            size_hint_y: None
-            height: 40
+            Label:
+                text: 'Origin:'
+                size_hint_x: None
+                width: '100dp'
 
-        TextInput:
-            id: destination_input
-            hint_text: "Enter Destination"
-            multiline: False
-            size_hint_y: None
-            height: 40
+            TextInput:
+                id: origin_input
+                hint_text: 'Enter Origin City'
+                size_hint_x: None
+                width: '200dp'
 
-        Button:
-            text: "Check Traffic"
-            size_hint_y: None
-            height: 50
-            on_press: root.check_traffic()
+            Label:
+                text: 'Destination:'
+                size_hint_x: None
+                width: '100dp'
 
-        Label:
-            id: result_label
-            text: ""
-            font_size: '18sp'
-            halign: "center"
-            valign: "middle"
-            text_size: self.width, None
+            TextInput:
+                id: destination_input
+                hint_text: 'Enter Destination City'
+                size_hint_x: None
+                width: '200dp'
 
-        Button:
-            text: "Back to Dashboard"
-            size_hint_y: None
-            height: 40
-            on_press:
-                root.manager.current = 'dashboard'
+        # Content section where the traffic status will be displayed
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 10
+
+            Label:
+                id: content_label
+                text: "Traffic status will appear here."
+                size_hint_y: None
+                height: '40dp'
+
+            Button:
+                text: 'Check Traffic'
+                on_press: root.on_check_traffic()
+                size_hint_y: None
+                height: '50dp'
