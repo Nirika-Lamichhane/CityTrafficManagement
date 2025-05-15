@@ -24,7 +24,7 @@
                 background_normal: ''
                 color: 0, 0, 0, 1
                 font_size: '18sp'
-                on_press: root.on_check_traffic()
+                on_press: root.manager.current='check_traffic'
 
             Button:
                 text: "Shortest Path"
@@ -33,7 +33,7 @@
                 background_normal: ''
                 color: 0, 0, 0, 1
                 font_size: '18sp'
-                on_press: root.on_shortest_path()
+                on_press: root.manager.current
 
             Button:
                 text: "Alternative Routes"
