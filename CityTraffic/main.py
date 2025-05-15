@@ -13,9 +13,10 @@ class CityTrafficApp(App): # class that inherits from app class
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(DashboardScreen(name='dashboard'))
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
+        print (f"Screens in screenmanager:{sm.screens}")
         return sm
 if __name__ == '__main__':
-     CityTrafficApp().run()
+    CityTrafficApp().run()
 
 '''
 name is built in python variable

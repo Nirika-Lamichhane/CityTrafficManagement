@@ -12,8 +12,8 @@ class CheckTrafficScreen(Screen):
 
         if origin and destination:
             result=get_traffic_status(origin, destination)
-            self.ids.result_label.text=f"Traffic from {result['origin']} to {result['destination']} is {result['traffic_level']}"
+            self.ids.content_label.text=f"Traffic from {result['origin']} to {result['destination']} is {result['traffic_level']}"
             self.ids.origin_input.text=""
             self.ids.destination_input.text=""
         else:
-            self.ids.result_label.text="Please enter both origin and destination."
+            self.ids.content_label.text="Please enter both origin and destination."
