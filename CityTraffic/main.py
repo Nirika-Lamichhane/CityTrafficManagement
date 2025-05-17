@@ -11,7 +11,7 @@ class CityTrafficApp(App): # class that inherits from app class
     def build(self): # build is method of app class which is used to build the app
         sm = ScreenManager()
         sm.add_widget(LoginScreen(name='login'))
-        sm.add_widget(DashboardScreen(name='dashboard'))
+        sm.add_widget(DashboardScreen(name='dashboard')) # here the name is given so as we can do scren transition
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
         print (f"Screens in screenmanager:{sm.screens}")
         return sm

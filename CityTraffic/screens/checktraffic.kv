@@ -1,15 +1,17 @@
 <CheckTrafficScreen>:
-    name: "checktraffic"
+    # name: "checktraffic"
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1  # White background
+            rgba: 1, 1, 1, 1
         Rectangle:
             size: self.size
             pos: self.pos
 
-    RelativeLayout:  # Use RelativeLayout as the base layout
+    BoxLayout:  # Use BoxLayout as the main layout
+        orientation: 'vertical'
+        padding: dp(10)
+        spacing: dp(10)
 
-        # Title Label as Header at the top
         Label:
             text: "[b]City Traffic Checker[/b]"
             markup: True
@@ -17,102 +19,113 @@
             color: 0, 0.4, 1, 1
             valign: "middle"
             halign: "center"
-            size_hint_y: None
-            height: dp(60)
+            size_hint_y: None  # Label height should be defined by its text
+            height: self.texture_size[1] + dp(20)  # Add padding to label height
             text_size: self.size
-            pos_hint: {'center_x': 0.5, 'top': 1}  # Position at top center
-            padding_y: dp(20)
+            canvas.before:
+                Color:
+                    rgba: 0.8, 0.8, 0.8, 1
+                Line:
+                    width: 1.5
+                    rectangle: (self.x, self.y, self.width, self.height)
 
-        BoxLayout: # wrap the rest of the content in a box layout.
-            orientation: "vertical"
+        BoxLayout: #boxlayout for origin and destination
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: self.minimum_height
             spacing: dp(10)
-            pos_hint: {'center_x': 0.5, 'y': 0.5} #  Position the boxlayout at the  center
-            size_hint_y: None # Added size_hint_y: None to the BoxLayout
-            height: self.minimum_height  # Set the height to minimum_height
 
-
-            # FORM INPUTS (ORIGIN / DESTINATION)
-            GridLayout:
-                cols: 2
-                row_force_default: True
-                row_default_height: dp(50)
-                spacing: dp(10)
-                size_hint_y: None
-                height: self.minimum_height
-                size_hint_x: 1
-                padding: dp(20),  0, dp(20), 0 # Remove top padding.
-
-                Label:
-                    text: "Origin:"
-                    color: 0, 0.4, 1, 1
-                    valign: "middle"
-                    halign: "left"
-                    text_size: self.size
-
-                Spinner:
-                    id: origin_spinner
-                    text: "Select Origin"
-                    values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                    background_color: 1, 1, 1, 1
-                    color: 0, 0, 0, 1
-                    size_hint_x: 1
-
-                Label:
-                    text: "Destination:"
-                    color: 0, 0.4, 1, 1
-                    valign: "middle"
-                    halign: "left"
-                    text_size: self.size
-
-                Spinner:
-                    id: destination_spinner
-                    text: "Select Destination"
-                    values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                    background_color: 1, 1, 1, 1
-                    color: 0, 0, 0, 1
-                    size_hint_x: 1
-
-            # RESULT LABEL
             Label:
-                id: content_label
-                text: "Traffic status will appear here."
-                font_size: "16sp"
-                halign: "center"
+                text: "[b]Origin:[/b]"
+                markup: True
+                color: 0, 0.3, 1, 1
                 valign: "middle"
+                halign: "center"
+                size_hint_x: None #added
+                width: self.texture_size[0] + dp(20)
                 text_size: self.size
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    Line:
+                        width: 1
+                        rectangle: (self.x, self.y, self.width, self.height)
+
+            Spinner:
+                id: origin_spinner
+                text: "Select Origin"
+                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                background_color: 0.8, 0.8, 0.8, 1
+                color: 1, 1, 1, 1
+                size_hint_x: 1
+
+            Label:
+                text: "[b]Destination:[/b]"
+                markup: True
+                color: 0, 0.3, 1, 1
+                valign: "middle"
+                halign: "center"
+                size_hint_x: None #added
+                width: self.texture_size[0] + dp(20)
+                text_size: self.size
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    Line:
+                        width: 1
+                        rectangle: (self.x, self.y, self.width, self.height)
+
+            Spinner:
+                id: destination_spinner
+                text: "Select Destination"
+                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                background_color: 0.8, 0.8, 0.8, 1
+                color: 1, 1, 1, 1
+                size_hint_x: 1
+
+        # Color Box
+        BoxLayout:
+            id: traffic_color_box
+            size_hint_y: None
+            height: dp(50)
+            background_color: 0, 1, 0, 1  # Default: Green
+            size_hint_x: 1
+            orientation: 'horizontal'
+
+            # Text Label
+            Label:
+                id: traffic_text_label
+                text: ""  # Start with empty text, will be updated later
+                markup: True
+                font_size: "16sp"
+                halign: "left"
+                valign: "middle"
                 color: 0, 0, 0, 1
-                size_hint_y: None
-                height: self.texture_size[1]
-                padding_x: dp(20)
+                size_hint_x: None
+                width: self.texture_size[0]
+                padding: [dp(10), 0, 0, 0]
 
-            # CHECK BUTTON with icon
-            Button:
-                size_hint_y: None
-                height: dp(50)
-                background_normal: ''
-                background_color: 0, 0.4, 1, 1
-                on_release: root.check_traffic()
-                padding: dp(20), 0, dp(20), 0
+        # CHECK BUTTON with icon
+        Button:
+            size_hint_y: None
+            height: dp(50)
+            background_normal: ''
+            background_color: 0, 0.4, 1, 1
+            on_release: root.check_traffic()
+            padding: dp(20), 0, dp(20), 0
 
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing: dp(10)
-                    padding: dp(5)
-                    size_hint_x: 1
-                    size_hint_y: 1
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: dp(10)
+                padding: dp(5)
+                size_hint_x: 1
+                size_hint_y: 1
 
-                    Image:
-                        source: "assets/Sign-check-icon.png"
-                        size_hint_x: None
-                        width: dp(30)
-                        allow_stretch: True
-                        keep_ratio: True
-
-                    Label:
-                        text: "Check Traffic"
-                        font_size: "18sp"
-                        color: 1, 1, 1, 1
-                        valign: "middle"
-                        halign: "left"
-                        size_hint_x: None
-                        width: self.texture_size[0]
+                Label:
+                    text: "Check Traffic"
+                    font_size: "18sp"
+                    color: 1, 1, 1, 1
+                    valign: "middle"
+                    halign: "left"
+                    size_hint_x: None
+                    width: self.texture_size[0]
