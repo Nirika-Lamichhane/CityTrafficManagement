@@ -1,5 +1,4 @@
 <CheckTrafficScreen>:
-    # name: "checktraffic"
     canvas.before:
         Color:
             rgba: 1, 1, 1, 1
@@ -7,11 +6,7 @@
             size: self.size
             pos: self.pos
 
-    BoxLayout:  # Use BoxLayout as the main layout
-        orientation: 'vertical'
-        padding: dp(10)
-        spacing: dp(10)
-
+    RelativeLayout:
         Label:
             text: "[b]City Traffic Checker[/b]"
             markup: True
@@ -19,21 +14,30 @@
             color: 0, 0.4, 1, 1
             valign: "middle"
             halign: "center"
-            size_hint_y: None  # Label height should be defined by its text
-            height: self.texture_size[1] + dp(20)  # Add padding to label height
+            size_hint_y: None
+            height: dp(60)
             text_size: self.size
+            pos_hint: {'center_x': 0.5, 'top': 1}
+            padding_y: dp(20)
+
             canvas.before:
                 Color:
-                    rgba: 0.8, 0.8, 0.8, 1
+                    rgba: 0, 0, 0, 1
                 Line:
                     width: 1.5
                     rectangle: (self.x, self.y, self.width, self.height)
 
-        BoxLayout: #boxlayout for origin and destination
-            orientation: 'horizontal'
+        GridLayout:
+            cols: 2
+            row_force_default: True
+            row_default_height: dp(50)
+            spacing: dp(10)
             size_hint_y: None
             height: self.minimum_height
-            spacing: dp(10)
+            size_hint_x: None
+            width: dp(300)
+            pos_hint: {'center_x': 0.5, 'top': 0.8}
+            padding: dp(20), 0, dp(20), 0
 
             Label:
                 text: "[b]Origin:[/b]"
@@ -41,8 +45,6 @@
                 color: 0, 0.3, 1, 1
                 valign: "middle"
                 halign: "center"
-                size_hint_x: None #added
-                width: self.texture_size[0] + dp(20)
                 text_size: self.size
                 canvas.before:
                     Color:
@@ -58,6 +60,8 @@
                 background_color: 0.8, 0.8, 0.8, 1
                 color: 1, 1, 1, 1
                 size_hint_x: 1
+                size_hint_y: None
+                height: dp(40)
 
             Label:
                 text: "[b]Destination:[/b]"
@@ -65,8 +69,6 @@
                 color: 0, 0.3, 1, 1
                 valign: "middle"
                 halign: "center"
-                size_hint_x: None #added
-                width: self.texture_size[0] + dp(20)
                 text_size: self.size
                 canvas.before:
                     Color:
@@ -82,44 +84,59 @@
                 background_color: 0.8, 0.8, 0.8, 1
                 color: 1, 1, 1, 1
                 size_hint_x: 1
+                size_hint_y: None
+                height: dp(40)
 
-        # Color Box
+        # Color Box and Label Container
         BoxLayout:
-            id: traffic_color_box
-            size_hint_y: None
-            height: dp(50)
-            background_color: 0, 1, 0, 1  # Default: Green
-            size_hint_x: 1
-            orientation: 'horizontal'
+            orientation: 'vertical'
+            size_hint_x: 0.8
+            pos_hint: {'center_x': 0.5, 'top': 0.55}
+
+            # Color Box (dynamic background color)
+            BoxLayout:
+                id: traffic_color_box
+                size_hint_y: None
+                height: dp(100)
+                size_hint_x: 1
+                orientation: 'horizontal'
+                spacing: dp(10)
+                padding: dp(10), 0
+
+                canvas.before:
+                    Color:
+                        rgba: root.traffic_color if hasattr(root, 'traffic_color') else (0, 1, 0, 1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
 
             # Text Label
             Label:
                 id: traffic_text_label
-                text: ""  # Start with empty text, will be updated later
+                text: ""
                 markup: True
                 font_size: "16sp"
-                halign: "left"
-                valign: "middle"
+                halign: "center"
+                valign: "top"
                 color: 0, 0, 0, 1
-                size_hint_x: None
-                width: self.texture_size[0]
-                padding: [dp(10), 0, 0, 0]
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: self.size
 
-        # CHECK BUTTON with icon
+        # Check Traffic Button
         Button:
-            size_hint_y: None
-            height: dp(50)
+            size_hint: None, None
+            size: dp(180), dp(50)
             background_normal: ''
             background_color: 0, 0.4, 1, 1
             on_release: root.check_traffic()
-            padding: dp(20), 0, dp(20), 0
+            pos_hint: {'center_x': 0.5, 'top': 0.45}
 
             BoxLayout:
                 orientation: 'horizontal'
                 spacing: dp(10)
                 padding: dp(5)
-                size_hint_x: 1
-                size_hint_y: 1
+                size_hint: 1, 1
 
                 Label:
                     text: "Check Traffic"
@@ -127,5 +144,4 @@
                     color: 1, 1, 1, 1
                     valign: "middle"
                     halign: "left"
-                    size_hint_x: None
-                    width: self.texture_size[0]
+                    text_size: self.size

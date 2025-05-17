@@ -1,17 +1,13 @@
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.utils import get_color_from_hex
 from kivy.uix.screenmanager import Screen
-from traffic import get_traffic_status
+
 from kivy.lang import Builder
 
 Builder.load_file("screens/checktraffic.kv")
 
-# ... your other imports ...
-from kivy.uix.popup import Popup
-from kivy.utils import get_color_from_hex
-
 class CheckTrafficScreen(Screen):
-    def __init__(self, **kwargs):
-        super(CheckTrafficScreen, self).__init__(**kwargs)
-
     def check_traffic(self):
         origin = self.ids.origin_spinner.text
         destination = self.ids.destination_spinner.text
@@ -23,24 +19,28 @@ class CheckTrafficScreen(Screen):
                           content=Label(text="Please select both Origin and Destination."),
                           size_hint=(None, None), size=(400, 200))
             popup.open()
-            return  # Stop the rest of the function from executing
+            return
 
-        # Placeholder traffic logic
+        # Helper to update canvas color
+        def set_box_color(color_hex):
+            color_instruction = color_box.canvas.before.children[1]
+            color_instruction.rgba = get_color_from_hex(color_hex)
+
         if origin == destination:
             message = "Origin and destination cannot be the same."
-            color_box.background_color = get_color_from_hex("#FFFF00")
+            set_box_color("#FFFF00")  # Yellow
             text_label.text = "[b]Invalid Input[/b]"
         elif origin == "Thamel" and destination == "Baneshwor":
             message = "High traffic expected."
-            color_box.background_color = get_color_from_hex("#FF0000")
+            set_box_color("#FF0000")  # Red
             text_label.text = "[b]High Traffic[/b]"
         elif origin == "Lazimpat" and destination == "Baluwatar":
             message = "Medium traffic expected."
-            color_box.background_color = get_color_from_hex("#FFFF00")
+            set_box_color("#FFFF00")  # Yellow
             text_label.text = "[b]Medium Traffic[/b]"
         else:
             message = "Low traffic expected."
-            color_box.background_color = get_color_from_hex("#00FF00")
+            set_box_color("#00FF00")  # Green
             text_label.text = "[b]Low Traffic[/b]"
 
         text_label.size_hint_x = None
