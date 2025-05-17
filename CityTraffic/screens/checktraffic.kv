@@ -1,126 +1,118 @@
 <CheckTrafficScreen>:
     name: "checktraffic"
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # White background
+        Rectangle:
+            size: self.size
+            pos: self.pos
 
-    BoxLayout:
-        orientation: "vertical"
-        padding: dp(20)
-        spacing: dp(10)
+    RelativeLayout:  # Use RelativeLayout as the base layout
 
-        # HEADER with icon and title, light blue background
-        BoxLayout:
+        # Title Label as Header at the top
+        Label:
+            text: "[b]City Traffic Checker[/b]"
+            markup: True
+            font_size: "24sp"
+            color: 0, 0.4, 1, 1
+            valign: "middle"
+            halign: "center"
             size_hint_y: None
             height: dp(60)
-            padding: dp(10)
-            spacing: dp(10)
+            text_size: self.size
+            pos_hint: {'center_x': 0.5, 'top': 1}  # Position at top center
+            padding_y: dp(20)
 
-            AnchorLayout:
-                anchor_x: 'center'
-                anchor_y: 'top'
+        BoxLayout: # wrap the rest of the content in a box layout.
+            orientation: "vertical"
+            spacing: dp(10)
+            pos_hint: {'center_x': 0.5, 'y': 0.5} #  Position the boxlayout at the  center
+            size_hint_y: None # Added size_hint_y: None to the BoxLayout
+            height: self.minimum_height  # Set the height to minimum_height
+
+
+            # FORM INPUTS (ORIGIN / DESTINATION)
+            GridLayout:
+                cols: 2
+                row_force_default: True
+                row_default_height: dp(50)
+                spacing: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+                size_hint_x: 1
+                padding: dp(20),  0, dp(20), 0 # Remove top padding.
+
+                Label:
+                    text: "Origin:"
+                    color: 0, 0.4, 1, 1
+                    valign: "middle"
+                    halign: "left"
+                    text_size: self.size
+
+                Spinner:
+                    id: origin_spinner
+                    text: "Select Origin"
+                    values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                    size_hint_x: 1
+
+                Label:
+                    text: "Destination:"
+                    color: 0, 0.4, 1, 1
+                    valign: "middle"
+                    halign: "left"
+                    text_size: self.size
+
+                Spinner:
+                    id: destination_spinner
+                    text: "Select Destination"
+                    values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                    size_hint_x: 1
+
+            # RESULT LABEL
+            Label:
+                id: content_label
+                text: "Traffic status will appear here."
+                font_size: "16sp"
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+                color: 0, 0, 0, 1
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding_x: dp(20)
+
+            # CHECK BUTTON with icon
+            Button:
+                size_hint_y: None
+                height: dp(50)
+                background_normal: ''
+                background_color: 0, 0.4, 1, 1
+                on_release: root.check_traffic()
+                padding: dp(20), 0, dp(20), 0
 
                 BoxLayout:
                     orientation: 'horizontal'
                     spacing: dp(10)
+                    padding: dp(5)
+                    size_hint_x: 1
+                    size_hint_y: 1
 
                     Image:
-                        source: "assets/traffic_icon.png"
+                        source: "assets/Sign-check-icon.png"
                         size_hint_x: None
-                        width: dp(40)
+                        width: dp(30)
                         allow_stretch: True
                         keep_ratio: True
 
                     Label:
-                        text: "[b]City Traffic Checker[/b]"
-                        markup: True
-                        font_size: "24sp"
-                        color: 0, 0.4, 1, 1
+                        text: "Check Traffic"
+                        font_size: "18sp"
+                        color: 1, 1, 1, 1
                         valign: "middle"
-                        halign: "center"
-                        text_size: self.size
+                        halign: "left"
                         size_hint_x: None
                         width: self.texture_size[0]
-                        size_hint_y: None
-                        height: self.texture_size[1]
-
-        # FORM INPUTS (ORIGIN / DESTINATION)
-        GridLayout:
-            cols: 2
-            row_force_default: True
-            row_default_height: dp(50)
-            spacing: dp(10)
-            size_hint_y: None
-            height: self.minimum_height
-            size_hint_x: 1
-
-            Label:
-                text: "Origin:"
-                color: 0, 0.4, 1, 1
-                valign: "middle"
-                halign: "left"
-                text_size: self.size
-
-            Spinner:
-                id: origin_spinner
-                text: "Select Origin"
-                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                background_color: 1, 1, 1, 1
-                color: 0, 0, 0, 1
-                size_hint_x: 1
-
-            Label:
-                text: "Destination:"
-                color: 0, 0.4, 1, 1
-                valign: "middle"
-                halign: "left"
-                text_size: self.size
-
-            Spinner:
-                id: destination_spinner
-                text: "Select Destination"
-                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                background_color: 1, 1, 1, 1
-                color: 0, 0, 0, 1
-                size_hint_x: 1
-
-        # RESULT LABEL
-        Label:
-            id: content_label
-            text: "Traffic status will appear here."
-            font_size: "16sp"
-            halign: "center"
-            valign: "middle"
-            text_size: self.size
-            color: 0, 0, 0, 1
-            size_hint_y: None
-            height: self.texture_size[1]
-
-        # CHECK BUTTON with icon
-        Button:
-            size_hint_y: None
-            height: dp(50)
-            background_normal: ''
-            background_color: 0, 0.4, 1, 1
-            color: 1, 1, 1, 1
-            on_release: root.check_traffic()
-
-            BoxLayout:
-                orientation: 'horizontal'
-                spacing: dp(10)
-                padding: dp(5)
-                size_hint_x: 1
-                size_hint_y: 1
-
-                Image:
-                    source: "assets/Sign-check-icon.png"
-                    size_hint_x: None
-                    width: dp(30)
-                    allow_stretch: True
-                    keep_ratio: True
-
-                Label:
-                    text: "Check Traffic"
-                    font_size: "18sp"
-                    color: 1, 1, 1, 1
-                    valign: "middle"
-                    halign: "left"
-                    size_hint_x: None
-                    width: self.texture_size[0]
