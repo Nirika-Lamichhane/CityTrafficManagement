@@ -1,6 +1,6 @@
 import heapq  # imports heap queue i.e. priority queue to get the smallest distance
 from city_map import city_map
-from traffic import get_traffic_status
+from CityTraffic.traffic_logic import get_traffic_status
 from plyer import notification  # for desktop notifications
 # plyer is library and notification is the module
 
