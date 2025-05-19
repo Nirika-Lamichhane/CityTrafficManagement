@@ -85,7 +85,7 @@
                 size_hint_y: None
                 height: dp(40)
 
-         # Color box between destination and result label
+        # Color box between destination and result label
         BoxLayout:
             id: traffic_color_box
             size_hint: 0.5, None
@@ -93,12 +93,12 @@
             pos_hint: {'center_x': 0.5, 'top': 0.6}
             canvas.before:
                 Color:
-                    rgba: root.traffic_color if hasattr(root, 'traffic_color') else (0.5, 0.5, 0.5, 1)
+                    rgba: root.traffic_color
                 Rectangle:
                     pos: self.pos
                     size: self.size
 
-        # Traffic status label BELOW the color box
+        # Traffic status label
         Label:
             id: traffic_text_label
             text: "[b]Traffic Status[/b]"
@@ -114,20 +114,33 @@
             pos_hint: {'center_x': 0.5, 'top': 0.48}
             text_size: self.width, None
 
+        # Label to display the route
+        Label:
+            id: route_path_label
+            text: root.route_path  # Bind to the route_path property
+            markup: True
+            font_size: "14sp"
+            halign: "center"
+            valign: "middle"
+            color: 0.1, 0.1, 0.1, 1
+            size_hint_x: 0.9
+            size_hint_y: None
+            width: self.parent.width * 0.9
+            height: self.texture_size[1] + dp(10)
+            pos_hint: {'center_x': 0.5, 'top': 0.42}
+            text_size: self.width, None
 
         # Check Traffic Button
         Button:
             size_hint: None, None
             size: dp(180), dp(50)
             background_normal: ''
-            text:"Check Traffic"
-            font_size:"18sp"
-            colir:1,1,1,1
+            text: "Check Traffic"
+            font_size: "18sp"
+            color: 1, 1, 1, 1
             background_color: 0, 0.4, 1, 1
-            halign:'center'
-            valign:'middle'
-            text_size:self.size
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
             on_release: root.check_traffic()
             pos_hint: {'center_x': 0.5, 'top': 0.35}
-
-           

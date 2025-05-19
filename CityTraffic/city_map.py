@@ -1,6 +1,7 @@
 # defining city and routes as a graph here cities are in nodes and distance will be the edges
 # each item represents a node in graph i.e. every locations
 
+
 city_map = {
     "Thamel": [("Lazimpat", (5, 0.4)), ("Dilli Bazaar", (8, 0.6))],
     "Lazimpat": [("Thamel", (5, 0.4)), ("Baluwatar", (6, 0.5))],
@@ -13,6 +14,9 @@ city_map = {
     "Patan": [("Baneshwor", (11, 1.5)), ("Kalimati", (9, 1.1))],
     "Kalimati": [("Patan", (9, 1.1)), ("Thamel", (12, 1.3))]
 }
+
+
+
 
 # city map is a dictionary where each key is a city eg thamel lazimpat of the lhs side and the value is a list of tuples i.e. after =
 # tuple is in the form of minutes and distance in km
