@@ -10,6 +10,43 @@
         orientation: 'vertical'
         padding: dp(20)
         spacing: dp(15)
+         # NEW: Top navigation bar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50) # Fixed height for the nav bar
+            padding: dp(10)
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.2, 0.3, 1 # Dark blue-grey background for nav bar
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # Back Button
+            Button:
+                text: "Back"
+                size_hint_x: None
+                width: dp(80)
+                background_normal: ''
+                background_color: 0.3, 0.5, 0.7, 1 # Slightly lighter blue
+                color: 1, 1, 1, 1
+                font_size: "16sp"
+                on_release: root.go_back()
+
+            Widget: # Spacer to push other buttons to the right
+                size_hint_x: 1
+
+            # Go to Dashboard Button (example navigation)
+            Button:
+                text: "Dashboard"
+                size_hint_x: None
+                width: dp(120)
+                background_normal: ''
+                background_color: 0.2, 0.6, 1, 1 # Blue color
+                color: 1, 1, 1, 1
+                font_size: "16sp"
+                on_release: root.go_to_dashboard()
 
         # Fixed header label always visible
         Label:

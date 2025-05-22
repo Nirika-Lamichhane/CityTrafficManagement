@@ -4,10 +4,25 @@ from dijkstra import dijkstra
 from city_map import city_map
 
 use_real_api = False
+from datetime import datetime
+
+def get_time_based_traffic():
+    hour = datetime.now().hour
+    if 7 <= hour <= 10 or 17 <= hour <= 20:
+        # Morning and evening rush hours
+        return random.choices(["high", "medium", "low"], weights=[0.5, 0.3, 0.2])[0]
+    elif 11 <= hour <= 16:
+        # Midday, lighter traffic
+        return random.choices(["medium", "low", "high"], weights=[0.4, 0.4, 0.2])[0]
+    else:
+        # Nighttime, very light traffic
+        return random.choices(["low", "medium", "high"], weights=[0.7, 0.2, 0.1])[0]
+
 
 def get_mock_traffic_status(origin, destination, intermediate=None):
     traffic_levels = ["low", "medium", "high"]
-    traffic = random.choices(traffic_levels, weights=[0.4, 0.4, 0.2])[0]
+    traffic = get_time_based_traffic()
+
 
     # Main route
     if intermediate:

@@ -27,7 +27,19 @@ class ShortestPathScreen(Screen):
     """
     # Kivy property to update the result label dynamically from Python
     result_text = StringProperty("Select origin and destination to find the shortest path.")
+    def go_back(self):
+        """
+        Navigates back to the previous screen in the ScreenManager history.
+        """
+        if self.manager:
+            self.manager.current='dashboard'# Use go_back() to follow history
 
+    def go_to_dashboard(self):
+        """
+        Navigates directly to the 'dashboard' screen.
+        """
+        if self.manager:
+            self.manager.current = 'dashboard' # Set current screen by name
     def find_shortest(self):
         """
         Callback function for the 'Find Shortest Path' button.

@@ -17,6 +17,44 @@
         padding: dp(15) # Slightly reduced padding
         spacing: dp(10) # Reduced spacing between major sections
 
+        # NEW: Top navigation bar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50) # Fixed height for the nav bar
+            padding: dp(10)
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.2, 0.3, 1 # Dark blue-grey background for nav bar
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            # Back Button
+            Button:
+                text: "Back"
+                size_hint_x: None
+                width: dp(80)
+                background_normal: ''
+                background_color: 0.3, 0.5, 0.7, 1 # Slightly lighter blue
+                color: 1, 1, 1, 1
+                font_size: "16sp"
+                on_release: root.go_back()
+
+            Widget: # Spacer to push other buttons to the right
+                size_hint_x: 1
+
+            # Go to Dashboard Button (example navigation)
+            Button:
+                text: "Dashboard"
+                size_hint_x: None
+                width: dp(120)
+                background_normal: ''
+                background_color: 0.2, 0.6, 1, 1 # Blue color
+                color: 1, 1, 1, 1
+                font_size: "16sp"
+                on_release: root.go_to_dashboard()
+
         # Fixed header label at the top, styled like the traffic checker
         Label:
             text: "[b]Shortest Path Calculator[/b]" # Bold text using markup
@@ -106,7 +144,7 @@
                         text: "Select Origin" # Default text
                         values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"] # List of origin options
                         background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
-                        color: 1,1,1, 1 #  text color
+                        color: 0, 0, 0, 1 # Black text color
                         size_hint_y: None
                         height: dp(40)
 
@@ -132,7 +170,7 @@
                         text: "Select Destination" # Default text
                         values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"] # List of destination options
                         background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
-                        color: 1,1,1, 1 # white text color
+                        color: 0, 0, 0, 1
                         size_hint_y: None
                         height: dp(40)
 
@@ -158,7 +196,7 @@
                         text: 'distance' # Default value
                         values: ['distance', 'time'] # Options for mode
                         background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
-                        color: 1,1,1, 1 # white text color
+                        color: 0, 0, 0, 1
                         size_hint_y: None
                         height: dp(40)
 
@@ -185,8 +223,7 @@
                         size_hint_x: 0.2 # Make checkbox smaller
                         pos_hint: {'center_x': 0.5} # Center the checkbox
                         canvas.before: 
-                        # NEW: Add background to CheckBox for visibility
-
+                            # NEW: Add background to CheckBox for visibility
                             Color:
                                 rgba: 0.6, 0.7, 0.8, 1 # A light blue-grey background
                             Rectangle:
@@ -197,17 +234,13 @@
                             Line:
                                 width: 1
                                 rectangle: (self.x, self.y, self.width, self.height)
-                
-                Widget:
-                    size_hint_y: None
-                    height: dp(20)
 
 
                 # NEW: BoxLayout to contain the result_label and give it a background/border
                 BoxLayout:
                     size_hint_y: None
                     height: dp(150) # Maintain the height for the result area
-                    size_hint_x: 0.6 # Match parent's width hint
+                    size_hint_x: 0.7 # Adjusted width to make it smaller (from 0.9 to 0.7)
                     pos_hint: {'center_x': 0.5} # Center horizontally
                     padding: dp(10) # Padding inside this new box
                     canvas.before:

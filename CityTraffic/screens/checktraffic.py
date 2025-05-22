@@ -12,6 +12,19 @@ Builder.load_file("screens/checktraffic.kv")
 class CheckTrafficScreen(Screen):
     traffic_color = ListProperty([0.5, 0.5, 0.5, 1])  # Default grey
     route_path = StringProperty("")
+    def go_back(self):
+        """
+        Navigates back to the previous screen in the ScreenManager history.
+        """
+        if self.manager:
+            self.manager.current='dashboard'# Use go_back() to follow history
+
+    def go_to_dashboard(self):
+        """
+        Navigates directly to the 'dashboard' screen.
+        """
+        if self.manager:
+            self.manager.current = 'dashboard' # Set current screen by name
 
     def set_box_color(self, hex_color):
         color = get_color_from_hex(hex_color)
