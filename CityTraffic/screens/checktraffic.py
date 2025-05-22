@@ -5,7 +5,6 @@ from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import StringProperty, ListProperty
 
-
 from traffic_logic import get_traffic_status  # Use your own logic file name
 
 Builder.load_file("screens/checktraffic.kv")
@@ -13,6 +12,10 @@ Builder.load_file("screens/checktraffic.kv")
 class CheckTrafficScreen(Screen):
     traffic_color = ListProperty([0.5, 0.5, 0.5, 1])  # Default grey
     route_path = StringProperty("")
+
+    def set_box_color(self, hex_color):
+        color = get_color_from_hex(hex_color)
+        self.traffic_color = color
 
     def check_traffic(self):
         origin = self.ids.origin_spinner.text
@@ -32,40 +35,45 @@ class CheckTrafficScreen(Screen):
         if origin == destination:
             self.set_box_color("#FFFF00")  # Yellow
             text_label.text = "[b]Origin and destination cannot be the same[/b]"
-            route_label.text = ""  # Clear any previous route
+            route_label.text = ""
             return
 
-        # Get traffic data
+        # Get traffic data from logic
         traffic_data = get_traffic_status(origin, destination)
-        traffic_level = traffic_data["traffic_level"]
-        route = traffic_data.get("route", [])
+        traffic_level = traffic_data.get("traffic_level", "Unknown")
+        main_route = traffic_data.get("route", [])
+        alt_routes = traffic_data.get("alternative_routes", [])
 
-        # Set UI elements based on traffic level
+        # Determine color and message for main traffic level
         if "high" in traffic_level.lower():
             color = "#FF0000"  # Red
-            text = "[b]High Traffic[/b]"
+            text_label.text = "[b]High Traffic[/b]"
         elif "medium" in traffic_level.lower():
             color = "#FFFF00"  # Yellow
-            text = "[b]Medium Traffic[/b]"
+            text_label.text = "[b]Medium Traffic[/b]"
         elif "low" in traffic_level.lower():
             color = "#00FF00"  # Green
-            text = "[b]Low Traffic[/b]"
+            text_label.text = "[b]Low Traffic[/b]"
         else:
             color = "#808080"  # Grey
-            text = f"[b]{traffic_level}[/b]"
+            text_label.text = f"[b]{traffic_level}[/b]"
 
         self.set_box_color(color)
-        text_label.text = text
 
-        if route:
-            route_label.text = f"[b]Route:[/b] {' -> '.join(route)}"
-        else:
-            route_label.text = "" # Clear the route label if no route is available
+        # Show route(s)
+        route_display = f"[b]Main Route (shortest distance):[/b] {' -> '.join(main_route)}"
 
-    def set_box_color(self, color_hex):
-        color_box = self.ids.traffic_color_box
-        for instr in color_box.canvas.before.children:
-            if hasattr(instr, 'rgba'):
-                instr.rgba = get_color_from_hex(color_hex)
-                break
+        # Only show alternative routes if traffic is high or medium
+        if traffic_level.lower() in ["high", "medium"] and alt_routes:
+            for alt in alt_routes:
+                alt_path = " -> ".join(alt["route"])
+                alt_level = alt["traffic_level"]
+                alt_color = (
+                    "[color=#FF0000]" if "high" in alt_level.lower()
+                    else "[color=#FFFF00]" if "medium" in alt_level.lower()
+                    else "[color=#00FF00]" if "low" in alt_level.lower()
+                    else "[color=#808080]"
+                )
+                route_display += f"\n[b]Alternative Route (less traffic route):[/b] {alt_path} - {alt_color}{alt_level}[/color]"
 
+        route_label.text = route_display

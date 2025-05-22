@@ -6,20 +6,22 @@
             size: self.size
             pos: self.pos
 
-    RelativeLayout:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(15)
+
+        # Fixed header label always visible
         Label:
             text: "[b]City Traffic Checker[/b]"
             markup: True
             font_size: "24sp"
             color: 0, 0.4, 1, 1
-            valign: "middle"
-            halign: "center"
             size_hint_y: None
-            height: dp(60)
-            text_size: self.size
-            pos_hint: {'center_x': 0.5, 'top': 1}
-            padding_y: dp(20)
-
+            height: self.texture_size[1] + dp(20)
+            halign: "center"
+            valign: "middle"
+            text_size: self.width, None
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
@@ -27,120 +29,144 @@
                     width: 1.5
                     rectangle: (self.x, self.y, self.width, self.height)
 
-        GridLayout:
-            cols: 2
-            row_force_default: True
-            row_default_height: dp(50)
-            spacing: dp(10)
-            size_hint_y: None
-            height: self.minimum_height
-            size_hint_x: None
-            width: dp(300)
-            pos_hint: {'center_x': 0.5, 'top': 0.8}
-            padding: dp(20), 0, dp(20), 0
+        ScrollView:
+            do_scroll_x: False
 
-            Label:
-                text: "[b]Origin:[/b]"
-                markup: True
-                color: 0, 0.3, 1, 1
-                valign: "middle"
-                halign: "center"
-                text_size: self.size
-                canvas.before:
-                    Color:
-                        rgba: 0.8, 0.8, 0.8, 1
-                    Line:
-                        width: 1
-                        rectangle: (self.x, self.y, self.width, self.height)
-
-            Spinner:
-                id: origin_spinner
-                text: "Select Origin"
-                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                background_color: 0.8, 0.8, 0.8, 1
-                color: 1, 1, 1, 1
+            BoxLayout:
+                orientation: 'vertical'
                 size_hint_y: None
-                height: dp(40)
+                height: self.minimum_height
+                size_hint_x: 0.8  # Adjust this value to control the width of the centered content
+                pos_hint: {'center_x': 0.5} # Center horizontall
+                spacing: dp(15) # Maintain spacing between elements within this centered layout
 
-            Label:
-                text: "[b]Destination:[/b]"
-                markup: True
-                color: 0, 0.3, 1, 1
-                valign: "middle"
-                halign: "center"
-                text_size: self.size
-                canvas.before:
-                    Color:
-                        rgba: 0.8, 0.8, 0.8, 1
-                    Line:
-                        width: 1
-                        rectangle: (self.x, self.y, self.width, self.height)
+                Image:
+                    source: 'assets/traffic_icon.png'
+                    size_hint: None, None
+                    size: dp(250), dp(220)
+                    allow_stretch: True
+                    pos_hint: {'center_x': 0.5}
 
-            Spinner:
-                id: destination_spinner
-                text: "Select Destination"
-                values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
-                background_color: 0.8, 0.8, 0.8, 1
-                color: 1, 1, 1, 1
-                size_hint_y: None
-                height: dp(40)
+                GridLayout:
+                    cols: 2
+                    row_force_default: True
+                    row_default_height: dp(50)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    size_hint_x: None
+                    width: dp(300)
+                    pos_hint: {'center_x': 0.5}
+                    padding: dp(20), 0, dp(20), 0
 
-        # Color box between destination and result label
-        BoxLayout:
-            id: traffic_color_box
-            size_hint: 0.5, None
-            height: dp(80)
-            pos_hint: {'center_x': 0.5, 'top': 0.6}
-            canvas.before:
-                Color:
-                    rgba: root.traffic_color
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1.5
+                            rectangle: (self.x - dp(5), self.y - dp(5), self.width + dp(10), self.height + dp(10))
 
-        # Traffic status label
-        Label:
-            id: traffic_text_label
-            text: "[b]Traffic Status[/b]"
-            markup: True
-            font_size: "16sp"
-            halign: "center"
-            valign: "middle"
-            color: 0, 0, 0, 1
-            size_hint_x: 0.8
-            size_hint_y: None
-            width: self.parent.width * 0.8
-            height: self.texture_size[1] + dp(10)
-            pos_hint: {'center_x': 0.5, 'top': 0.48}
-            text_size: self.width, None
+                    Label:
+                        text: "[b]Origin:[/b]"
+                        markup: True
+                        color: 0, 0.3, 1, 1
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
 
-        # Label to display the route
-        Label:
-            id: route_path_label
-            text: root.route_path  # Bind to the route_path property
-            markup: True
-            font_size: "14sp"
-            halign: "center"
-            valign: "middle"
-            color: 0.1, 0.1, 0.1, 1
-            size_hint_x: 0.9
-            size_hint_y: None
-            width: self.parent.width * 0.9
-            height: self.texture_size[1] + dp(10)
-            pos_hint: {'center_x': 0.5, 'top': 0.42}
-            text_size: self.width, None
+                    Spinner:
+                        id: origin_spinner
+                        text: "Select Origin"
+                        values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                        background_color: 0.8, 0.8, 0.8, 1
+                        color: 1, 1, 1, 1
+                        size_hint_y: None
+                        height: dp(40)
 
-        # Check Traffic Button
-        Button:
-            size_hint: None, None
-            size: dp(180), dp(50)
-            background_normal: ''
-            text: "Check Traffic"
-            font_size: "18sp"
-            color: 1, 1, 1, 1
-            background_color: 0, 0.4, 1, 1
-            halign: 'center'
-            valign: 'middle'
-            text_size: self.size
-            on_release: root.check_traffic()
-            pos_hint: {'center_x': 0.5, 'top': 0.35}
+                    Label:
+                        text: "[b]Destination:[/b]"
+                        markup: True
+                        color: 0, 0.3, 1, 1
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.8, 0.8, 0.8, 1
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
+
+                    Spinner:
+                        id: destination_spinner
+                        text: "Select Destination"
+                        values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"]
+                        background_color: 0.8, 0.8, 0.8, 1
+                        color: 1, 1, 1, 1
+                        size_hint_y: None
+                        height: dp(40)
+
+                BoxLayout:
+                    id: traffic_color_box
+                    size_hint_y: None
+                    height: dp(80)
+                    size_hint_x: 0.5
+                    pos_hint: {'center_x': 0.5}
+                    canvas.before:
+                        Color:
+                            rgba: root.traffic_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    id: traffic_text_label
+                    text: "[b]Traffic Status[/b]"
+                    markup: True
+                    font_size: "16sp"
+                    halign: "center"
+                    valign: "middle"
+                    color: 0, 0, 0, 1
+                    size_hint_x: 0.8
+                    size_hint_y: None
+                    height: self.texture_size[1] + dp(10)
+                    pos_hint: {'center_x': 0.5}
+                    text_size: self.width, None
+
+                Label:
+                    id: route_path_label
+                    text: root.route_path
+                    markup: True
+                    font_size: "14sp"
+                    halign: "center"
+                    valign: "top"
+                    color: 0.1, 0.1, 0.1, 1
+                    size_hint_x: 0.9
+                    size_hint_y: None
+                    width: self.parent.width * 0.9 if self.parent else dp(300)
+                    height: dp(100)  # fixed height to avoid pushing layout
+                    text_size: self.width, self.height
+
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+
+                Button:
+                    size_hint: None, None
+                    size: dp(180), dp(50)
+                    background_normal: ''
+                    text: "Check Traffic"
+                    font_size: "18sp"
+                    color: 1, 1, 1, 1
+                    background_color: 0, 0.4, 1, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    pos_hint: {'center_x': 0.5}
+                    on_release: root.check_traffic()
