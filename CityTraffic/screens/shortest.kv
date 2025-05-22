@@ -1,0 +1,254 @@
+# shortest.kv
+# This file defines the Kivy GUI layout for the shortest path calculator application.
+# Place this file inside your 'screens' folder.
+
+<ShortestPathScreen>:
+    # Set the background color of the screen to white
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    # Main vertical box layout for the entire screen content
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(15) # Slightly reduced padding
+        spacing: dp(10) # Reduced spacing between major sections
+
+        # Fixed header label at the top, styled like the traffic checker
+        Label:
+            text: "[b]Shortest Path Calculator[/b]" # Bold text using markup
+            markup: True # Enable Kivy text markup
+            font_size: "24sp" # Font size
+            color: 0, 0.4, 1, 1 # Blue color for the header text
+            size_hint_y: None # Don't let it expand vertically
+            height: self.texture_size[1] + dp(20) # Height based on text size plus padding
+            halign: "center" # Horizontal alignment
+            valign: "middle" # Vertical alignment
+            text_size: self.width, None # Allow text to wrap if too long
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1 # Black color for the line
+                Line:
+                    width: 1.5 # Thickness of the line
+                    rectangle: (self.x, self.y, self.width, self.height) # Draw line around the label
+
+        # ScrollView to make the content scrollable if it exceeds screen height
+        ScrollView:
+            do_scroll_x: False # Disable horizontal scrolling
+
+            # Inner BoxLayout within the ScrollView for actual content
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None # Allow content to determine its height
+                height: self.minimum_height # Set height to minimum required by children
+                size_hint_x: 0.8  # Adjust this value to control the width of the centered content
+                pos_hint: {'center_x': 0.5} # Center horizontally
+                spacing: dp(8) # Further reduced spacing between elements within this centered layout
+
+                # Image for map visualization placeholder
+                Image:
+                    # Path to your map image. This path is relative to where main.py is run from.
+                    source: 'assets/images.jpg'
+                    size_hint: None, None # Fixed size
+                    size: dp(250), dp(220) # Dimensions of the image
+                    allow_stretch: True # Allow image to stretch to fit size
+                    pos_hint: {'center_x': 0.5} # Center horizontally
+
+                # GridLayout for Origin, Destination, Mode, and Traffic Aware options
+                GridLayout:
+                    cols: 2 # Two columns for label and input/spinner
+                    row_force_default: True # Force default row height
+                    row_default_height: dp(50) # Default height for each row
+                    spacing: dp(15) # Increased spacing between grid cells for better separation
+                    size_hint_y: None # Allow grid to determine its height
+                    height: self.minimum_height # Set height to minimum required by children
+                    size_hint_x: None # Fixed width for the grid
+                    width: dp(300) # Width of the grid
+                    pos_hint: {'center_x': 0.5} # Center horizontally
+                    padding: dp(20), 0, dp(20), 0 # Increased padding around the grid for more breathing room
+
+                    canvas.before:
+                        # Add a Rectangle for background color for the entire grid
+                        Color:
+                            rgba: 0.98, 0.98, 0.98, 1 # Very light grey background for the grid
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        # Line for the border, now with increased width
+                        Color:
+                            rgba: 0, 0, 0, 1 # Black color for the border
+                        Line:
+                            width: 2.5 # Increased thickness of the border line
+                            rectangle: (self.x - dp(5), self.y - dp(5), self.width + dp(10), self.height + dp(10)) # Draw border around the grid
+
+                    # Origin Label and Spinner
+                    Label:
+                        text: "[b]Origin:[/b]"
+                        markup: True
+                        color: 1, 1, 1, 1 # White text for better visibility
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.2, 0.3, 0.4, 1 # Darker blue-grey background for label
+                            Rectangle: # Use Rectangle for solid background
+                                pos: self.pos
+                                size: self.size
+                            Line:
+                                width: 1 # Border for label
+                                rectangle: (self.x, self.y, self.width, self.height)
+                    Spinner:
+                        id: origin_spinner # ID for accessing in Python
+                        text: "Select Origin" # Default text
+                        values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"] # List of origin options
+                        background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
+                        color: 1,1,1, 1 #  text color
+                        size_hint_y: None
+                        height: dp(40)
+
+                    # Destination Label and Spinner
+                    Label:
+                        text: "[b]Destination:[/b]"
+                        markup: True
+                        color: 1, 1, 1, 1
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.2, 0.3, 0.4, 1 # Darker blue-grey background for label
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
+                    Spinner:
+                        id: destination_spinner # ID for accessing in Python
+                        text: "Select Destination" # Default text
+                        values: ["Thamel", "Lazimpat", "Baneshwor", "Baluwatar", "Patan", "Boudha", "Chabahil", "Dilli Bazaar", "Gairidhara", "Kalimati"] # List of destination options
+                        background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
+                        color: 1,1,1, 1 # white text color
+                        size_hint_y: None
+                        height: dp(40)
+
+                    # Mode Label and Spinner
+                    Label:
+                        text: "[b]Mode:[/b]"
+                        markup: True
+                        color: 1, 1, 1, 1
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.2, 0.3, 0.4, 1 # Darker blue-grey background for label
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
+                    Spinner:
+                        id: mode_spinner
+                        text: 'distance' # Default value
+                        values: ['distance', 'time'] # Options for mode
+                        background_color: 0.85, 0.85, 0.85, 1 # Lighter grey background for spinner
+                        color: 1,1,1, 1 # white text color
+                        size_hint_y: None
+                        height: dp(40)
+
+                    # Traffic Aware Label and CheckBox
+                    Label:
+                        text: "[b]Traffic Aware:[/b]"
+                        markup: True
+                        color: 1, 1, 1, 1
+                        valign: "middle"
+                        halign: "center"
+                        text_size: self.size
+                        canvas.before:
+                            Color:
+                                rgba: 0.2, 0.3, 0.4, 1 # Darker blue-grey background for label
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
+                    CheckBox:
+                        id: traffic_checkbox
+                        active: False # Default value
+                        size_hint_x: 0.2 # Make checkbox smaller
+                        pos_hint: {'center_x': 0.5} # Center the checkbox
+                        canvas.before: 
+                        # NEW: Add background to CheckBox for visibility
+
+                            Color:
+                                rgba: 0.6, 0.7, 0.8, 1 # A light blue-grey background
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Color:
+                                rgba: 0, 0, 0, 1 # Black border for the checkbox
+                            Line:
+                                width: 1
+                                rectangle: (self.x, self.y, self.width, self.height)
+                
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+
+
+                # NEW: BoxLayout to contain the result_label and give it a background/border
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(150) # Maintain the height for the result area
+                    size_hint_x: 0.6 # Match parent's width hint
+                    pos_hint: {'center_x': 0.5} # Center horizontally
+                    padding: dp(10) # Padding inside this new box
+                    canvas.before:
+                        Color:
+                            rgba: 0.9, 0.95, 1, 1 # A very light blue background for the result box
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0.4, 1, 1 # Blue border for the result box
+                        Line:
+                            width: 2 # Thicker border for emphasis
+                            rectangle: (self.x, self.y, self.width, self.height)
+
+                    # Label for displaying the calculated route path and total value
+                    Label:
+                        id: result_label # ID for accessing in Python
+                        text: "[b]" + root.result_text + "[/b]" # Make the entire text bold
+                        markup: True
+                        font_size: "16sp" # NEW: Larger font size
+                        halign: "center"
+                        valign: "middle" # Vertically centered
+                        color: 0.1, 0.1, 0.1, 1 # Dark grey text
+                        text_size: self.width, self.height # Ensure text_size uses height for valign
+
+                # Spacer widget
+                Widget:
+                    size_hint_y: None
+                    height: dp(10) # Reduced spacer height
+
+                # Button to trigger shortest path calculation
+                Button:
+                    size_hint: None, None
+                    size: dp(180), dp(50)
+                    background_normal: '' # Remove default button background
+                    text: "Find Shortest Path"
+                    font_size: "18sp"
+                    color: 1, 1, 1, 1 # White text
+                    background_color: 0, 0.4, 1, 1 # Blue background
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    pos_hint: {'center_x': 0.5} # Center horizontally
+                    on_release: root.find_shortest() # Call Python method on release

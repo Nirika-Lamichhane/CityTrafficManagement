@@ -5,6 +5,7 @@ from kivy.uix.screenmanager import ScreenManager
 from screens.login_screen import LoginScreen
 from screens.dashboard_screen import DashboardScreen
 from screens.checktraffic import CheckTrafficScreen
+from screens.shortest import ShortestPathScreen
 
 class CityTrafficApp(App): # class that inherits from app class 
 
@@ -13,6 +14,8 @@ class CityTrafficApp(App): # class that inherits from app class
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(DashboardScreen(name='dashboard')) # here the name is given so as we can do scren transition
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
+        sm.add_widget(ShortestPathScreen(name='shortest_path'))
+        
         print (f"Screens in screenmanager:{sm.screens}")
         return sm
 if __name__ == '__main__':
