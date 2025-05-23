@@ -6,6 +6,7 @@ from screens.login_screen import LoginScreen
 from screens.dashboard_screen import DashboardScreen
 from screens.checktraffic import CheckTrafficScreen
 from screens.shortest import ShortestPathScreen
+from screens.register_Screen import RegisterScreen
 
 class CityTrafficApp(App): # class that inherits from app class 
 
@@ -15,6 +16,8 @@ class CityTrafficApp(App): # class that inherits from app class
         sm.add_widget(DashboardScreen(name='dashboard')) # here the name is given so as we can do scren transition
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
         sm.add_widget(ShortestPathScreen(name='shortest_path'))
+        sm.add_widget(RegisterScreen(name='register'))
+
         
         print (f"Screens in screenmanager:{sm.screens}")
         return sm

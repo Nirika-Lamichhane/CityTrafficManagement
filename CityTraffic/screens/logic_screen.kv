@@ -83,3 +83,14 @@
                     color: 1, 1, 1, 1
                     font_size: '18sp'
                     on_release: root.login()
+
+                Label:
+                    markup: True
+                    text: "[ref=register][color=0066cc]Don't have an account? Register here[/color][/ref]"
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: 'center'
+                    valign: 'middle'
+                    on_ref_press:
+                        root.go_to_register()
+
