@@ -7,11 +7,13 @@ from screens.dashboard_screen import DashboardScreen
 from screens.checktraffic import CheckTrafficScreen
 from screens.shortest import ShortestPathScreen
 from screens.register_Screen import RegisterScreen
+from db_handler import create_table
 
 class CityTrafficApp(App): # class that inherits from app class 
 
     def build(self): # build is method of app class which is used to build the app
         sm = ScreenManager()
+        create_table()
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(DashboardScreen(name='dashboard')) # here the name is given so as we can do scren transition
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager

@@ -34,16 +34,40 @@ kwargs is used to pass the numbers of different types of variables to the functi
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
+from db_handler import get_user, verify_password
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+
 
 Builder.load_file("screens/logic_screen.kv")
 # The above line loads the kv file for the login screen
 
 class LoginScreen(Screen):
     def login(self):
-        username = self.ids.username.text
-        password = self.ids.password.text
+        username = self.ids.username.text.strip()
+        password = self.ids.password.text.strip()
+        stored_hash = get_user(username)
+        if stored_hash and verify_password(stored_hash, password):
+            self.manager.current = "dashboard"
+        else:
+            self.show_popup("Error", "Invalid username or password.")
     
 
     def go_to_register(self):
         self.manager.current = "register"
+
+    def show_popup(self, title, message):
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        layout.add_widget(Label(text=message))
+
+        close_button = Button(text="Close", size_hint=(1, 0.3))
+        layout.add_widget(close_button)
+
+        popup = Popup(title=title, content=layout,
+                      size_hint=(None, None), size=(300, 200), auto_dismiss=False)
+        close_button.bind(on_press=popup.dismiss)
+        popup.open()
+
 
