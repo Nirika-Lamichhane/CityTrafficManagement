@@ -8,8 +8,23 @@ from screens.checktraffic import CheckTrafficScreen
 from screens.shortest import ShortestPathScreen
 from screens.register_Screen import RegisterScreen
 from db_handler import create_table
+from screens.adminsScreen import AdminDashboard
+
 
 class CityTrafficApp(App): # class that inherits from app class 
+    
+    logged_in_users = []  # store user login details
+
+    def add_user_login(self, username, name, email):
+        from datetime import datetime
+        now = datetime.now().strftime("%I:%M %p")
+        self.logged_in_users.append({
+            "username": username,
+            "name": name,
+            "email": email,
+            "last_login": now,
+            "status": "Active"
+        })
 
     def build(self): # build is method of app class which is used to build the app
         sm = ScreenManager()
@@ -19,6 +34,8 @@ class CityTrafficApp(App): # class that inherits from app class
         sm.add_widget(CheckTrafficScreen(name='check_traffic')) # add widget to the screen manager
         sm.add_widget(ShortestPathScreen(name='shortest_path'))
         sm.add_widget(RegisterScreen(name='register'))
+        sm.add_widget(AdminDashboard(name='admin_dashboard'))
+
 
         
         print (f"Screens in screenmanager:{sm.screens}")

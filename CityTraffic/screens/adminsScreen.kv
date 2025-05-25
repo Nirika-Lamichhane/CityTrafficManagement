@@ -1,0 +1,69 @@
+
+<AdminDashboard>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(20)
+
+        # Header Label with white background and black text
+        Label:
+            text: "Welcome, Admin 👋"
+            font_size: '24sp'
+            bold: True
+            size_hint_y: None
+            height: self.texture_size[1] + dp(20)
+            halign: 'center'
+            valign: 'middle'
+            color: 0, 0, 0, 1  # Black text color
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # White background color
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        # Scrollable table for user data
+        ScrollView:
+            size_hint: 1, 1  # Allow ScrollView to take available space
+            GridLayout:
+                id: user_table
+                cols: 5
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: dp(40)
+                row_force_default: True
+                spacing: dp(5)
+                padding: dp(5) # Add some padding inside the grid
+
+                # Background for the table (optional, can be removed if not desired)
+                canvas.before:
+                    Color:
+                        rgba: 0.95, 0.95, 0.95, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+        # Buttons for Export Data and Logout
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(20)
+            padding: dp(10), 0 # Horizontal padding for buttons
+
+            Button:
+                text: "Export Data"
+                on_release: root.export_users()
+                background_normal: ''
+                background_color: 0.2, 0.6, 0.8, 1 # A nice blue color
+                color: 1, 1, 1, 1 # White text
+                font_size: '16sp'
+                bold: True
+
+            Button:
+                text: "Logout"
+                on_release: root.logout()
+                background_normal: ''
+                background_color: 0.8, 0.2, 0.2, 1 # A nice red color
+                color: 1, 1, 1, 1 # White text
+                font_size: '16sp'
+                bold: True

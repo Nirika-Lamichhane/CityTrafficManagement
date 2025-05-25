@@ -64,16 +64,29 @@
                     halign: 'center'
                     valign: 'middle'
 
-                TextInput:
-                    id: password
-                    hint_text: "Password"
-                    password: True
+                BoxLayout:
+                    orientation: 'horizontal'
                     size_hint_y: None
                     height: dp(50)
-                    multiline: False
-                    padding: [dp(15)] * 4
-                    halign: 'center'
-                    valign: 'middle'
+                    spacing: dp(10)
+
+                    TextInput:
+                        id: password
+                        hint_text: "Password"
+                        password: True
+                        multiline: False
+                        halign: 'center'
+                        valign: 'middle'
+                        padding: [dp(15), dp(15), dp(5), dp(15)]
+                        size_hint_x: 0.85
+
+                    Button:
+                        id: toggle_password
+                        text: '👁' if password.password else '🙈'
+                        size_hint_x: 0.15
+                        on_release:
+                            password.password = not password.password
+                            self.text = '👁' if password.password else '🙈'
 
                 Button:
                     text: "Login"
@@ -93,4 +106,3 @@
                     valign: 'middle'
                     on_ref_press:
                         root.go_to_register()
-

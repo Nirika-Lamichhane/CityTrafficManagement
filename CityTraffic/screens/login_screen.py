@@ -45,9 +45,20 @@ Builder.load_file("screens/logic_screen.kv")
 # The above line loads the kv file for the login screen
 
 class LoginScreen(Screen):
+
     def login(self):
-        username = self.ids.username.text.strip()
+        username = self.ids.username.text.strip() # strip removes the whitespaces and returns the characters
         password = self.ids.password.text.strip()
+
+        if username== "admin":
+            admin_password = "admin123"
+            if password == admin_password:
+                self.manager.current = "admin_dashboard"
+                return
+            else:
+                self.show_popup("Error", "Invalid admin password.")
+                return
+            
         stored_hash = get_user(username)
         if stored_hash and verify_password(stored_hash, password):
             self.manager.current = "dashboard"
@@ -70,4 +81,5 @@ class LoginScreen(Screen):
         close_button.bind(on_press=popup.dismiss)
         popup.open()
 
+   
 
