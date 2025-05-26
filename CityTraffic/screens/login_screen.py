@@ -34,11 +34,12 @@ kwargs is used to pass the numbers of different types of variables to the functi
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from db_handler import get_user, verify_password
+from db_handler import get_user, verify_password,update_last_login
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from datetime import datetime
 
 
 Builder.load_file("screens/logic_screen.kv")
@@ -61,6 +62,10 @@ class LoginScreen(Screen):
             
         stored_hash = get_user(username)
         if stored_hash and verify_password(stored_hash, password):
+            # Update last login time
+            now_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            update_last_login(username, now_str)
+            
             self.manager.current = "dashboard"
         else:
             self.show_popup("Error", "Invalid username or password.")

@@ -1,69 +1,121 @@
-
 <AdminDashboard>:
+    # Define IDs for widgets to access them from Python
+    id: admin_dashboard_screen
+
     BoxLayout:
         orientation: 'vertical'
         spacing: dp(10)
         padding: dp(20)
 
-        # Header Label with white background and black text
+        # Header Label
         Label:
             text: "Welcome, Admin 👋"
             font_size: '24sp'
             bold: True
             size_hint_y: None
             height: self.texture_size[1] + dp(20)
-            halign: 'center'
-            valign: 'middle'
-            color: 0, 0, 0, 1  # Black text color
+            halign: 'center' # Center align header text
+            valign: 'middle' # Middle align header text
+            color: 0, 0, 0, 1
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1  # White background color
+                    rgba: 1, 1, 1, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
 
         # Scrollable table for user data
         ScrollView:
-            size_hint: 1, 1  # Allow ScrollView to take available space
-            GridLayout:
-                id: user_table
-                cols: 5
-                size_hint_y: None
-                height: self.minimum_height
-                row_default_height: dp(40)
-                row_force_default: True
-                spacing: dp(5)
-                padding: dp(5) # Add some padding inside the grid
+            size_hint: 1, 1
+            bar_width: dp(10)
+            do_scroll_x: False # Prevent horizontal scrolling
 
-                # Background for the table (optional, can be removed if not desired)
+            GridLayout:
+                id: user_table # ID to reference this GridLayout in Python
+                cols: 4 # Changed from 5 to 4 to match the number of header labels
+                size_hint_y: None # Allow height to be determined by content
+                height: self.minimum_height # Set height to minimum required by children
+                row_default_height: dp(40) # Default height for each row
+                row_force_default: True # Force default row height
+                spacing: dp(5) # Spacing between cells
+                padding: dp(5) # Padding around the grid content
+
                 canvas.before:
                     Color:
-                        rgba: 0.95, 0.95, 0.95, 1
+                        rgba: 0.95, 0.95, 0.95, 1 # Light gray background for the table area
                     Rectangle:
                         pos: self.pos
                         size: self.size
+
+                # Header row - All headers now have explicit alignment and text_size
+                Label:
+                    text: "Username"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    halign: 'center' # Center align header text
+                    valign: 'middle' # Middle align header text
+                    text_size: self.size # Crucial for halign/valign to work within the label's allocated space
+                    size_hint_x: 0.2 # Allocate 20% of the width to this column
+                Label:
+                    text: "Login Time"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    size_hint_x: 0.3 # Allocate 30% of the width
+                Label:
+                    text: "Role"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    size_hint_x: 0.2 # Allocate 20% of the width
+                Label:
+                    text: "Status"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
+                    size_hint_x: 0.3 # Allocate 30% of the width
 
         # Buttons for Export Data and Logout
         BoxLayout:
             size_hint_y: None
             height: dp(50)
             spacing: dp(20)
-            padding: dp(10), 0 # Horizontal padding for buttons
+            padding: dp(10), 0
 
             Button:
                 text: "Export Data"
-                on_release: root.export_users()
+                on_release: root.export_users() # Call the export_users method in AdminDashboard class
                 background_normal: ''
-                background_color: 0.2, 0.6, 0.8, 1 # A nice blue color
+                background_color: 0.2, 0.6, 0.8, 1 # Blue color
                 color: 1, 1, 1, 1 # White text
                 font_size: '16sp'
                 bold: True
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8),] # Rounded corners for button
 
             Button:
                 text: "Logout"
-                on_release: root.logout()
+                on_release: root.logout() # Call the logout method in AdminDashboard class
                 background_normal: ''
-                background_color: 0.8, 0.2, 0.2, 1 # A nice red color
+                background_color: 0.8, 0.2, 0.2, 1 # Red color
                 color: 1, 1, 1, 1 # White text
                 font_size: '16sp'
                 bold: True
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8),] # Rounded corners for button

@@ -1,212 +1,161 @@
 import csv
-from kivy.uix.screenmanager import Screen
-from kivy.properties import ListProperty
-from kivy.clock import Clock
+import os
+from datetime import datetime
+
 from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle # Import for drawing backgrounds
+from kivy.clock import Clock
 
-# Load the KV file. Ensure this path matches where your KV file is saved.
-# If your KV file is named 'admindashboard.kv' and is in the same directory, use that.
-# If it's in 'screens/adminsScreen.kv' as per your original code, ensure that path is correct.
-# For consistency with the provided KV immersive, let's assume it's named 'admindashboard.kv'
-# and is in the same directory as this Python file for simplicity.
+# Android storage path handling (optional on PC)
+try:
+    from android.storage import primary_external_storage_path
+except:
+    primary_external_storage_path = None
+
+# Assuming db_handler.py is in the same directory
+from db_handler import fetch_logged_in_users
+
+# Load the KV file (adjust if path is different)
 Builder.load_file("screens/adminsScreen.kv")
 
-
 class AdminDashboard(Screen):
-    # ListProperty to hold user data, allowing Kivy to observe changes
-    users = ListProperty([])
+    """
+    AdminDashboard screen for managing and viewing user data.
+    """
 
-    def on_enter(self):
+    def on_enter(self, *args):
         """
-        Called when the screen becomes active.
-        Responsible for loading initial user data and populating the table.
+        Called when the screen is entered. Schedules refreshing the user table.
         """
-        # Schedule the initial loading of users after the UI has been built
-        # This prevents issues with accessing self.ids before the KV is fully processed
-        Clock.schedule_once(self._load_users_initial, 0)
+        Clock.schedule_once(self.refresh_users_table, 0)
 
-    def _load_users_initial(self, dt):
+    def refresh_users_table(self, dt):
         """
-        Loads initial dummy user data.
-        In a real application, this would fetch data from a database or API.
+        Populates the user_table GridLayout with data.
         """
-        # Dummy user data - replace with real DB queries
-        # This data structure aligns with the columns in your KV file:
-        # Username, Name, Email, Last Login, Status
-        self.users = [
-            {"username": "johndoe", "name": "John Doe", "email": "john@example.com", "last_login": "10:05 AM", "status": "Active"},
-            {"username": "janedoe", "name": "Jane Doe", "email": "jane@example.com", "last_login": "09:45 AM", "status": "Inactive"},
-            {"username": "admin_user", "name": "Admin User", "email": "admin@example.com", "last_login": "08:30 AM", "status": "Active"},
-            {"username": "testuser1", "name": "Test User One", "email": "test1@example.com", "last_login": "11:00 AM", "status": "Active"},
-            {"username": "anotheruser", "name": "Another User", "email": "another@example.com", "last_login": "07:15 AM", "status": "Inactive"},
-            {"username": "kivydev", "name": "Kivy Developer", "email": "dev@kivy.org", "last_login": "01:20 PM", "status": "Active"},
-            {"username": "guest_account", "name": "Guest Account", "email": "guest@example.com", "last_login": "02:00 PM", "status": "Active"},
-            {"username": "blocked_user", "name": "Blocked User", "email": "blocked@example.com", "last_login": "03:40 PM", "status": "Suspended"},
-            {"username": "new_signup", "name": "New Signup", "email": "new@example.com", "last_login": "04:55 PM", "status": "Pending"},
-        ]
-        self.populate_table()
+        user_table = self.ids.user_table
+        user_table.clear_widgets()
+        users_data = fetch_logged_in_users()
 
-        # For real-time updates, you would typically set up a database listener here.
-        # Example (conceptual, for a database like Firebase Firestore):
-        # self.db_listener = db.collection('users').on_snapshot(self._on_users_db_update)
+        col_widths_ratio = {
+            'username': 0.2,
+            'login_time': 0.3,
+            'role': 0.2,
+            'status': 0.3
+        }
 
-    # def _on_users_db_update(self, col_snapshot, changes, read_time):
-    #     """
-    #     Conceptual callback for real-time database updates.
-    #     This method would be triggered by your database client when data changes.
-    #     """
-    #     print("Database update received, refreshing user table.")
-    #     # In a real scenario, you'd parse `changes` to incrementally update `self.users`
-    #     # For simplicity, we'll re-fetch or re-assign `self.users` and then re-populate.
-    #     # self.users = [user_data_from_snapshot_or_changes]
-    #     # self.populate_table()
+        grid_width = user_table.width - dp(10)
+        if grid_width <= 0:
+            grid_width = dp(400)
 
+        for user in users_data:
+            username_text = str(user.get('username', ''))
+            login_time_text = str(user.get('login_time', 'N/A'))
+            role_text = "User"    # Placeholder
+            status_text = "Active" # Placeholder
 
-    def populate_table(self):
-        """
-        Populates the user table (GridLayout) with headers and user data.
-        Ensures the table is scrollable by setting height based on minimum_height.
-        """
-        table_layout = self.ids.user_table
-        table_layout.clear_widgets() # Clear existing entries before repopulating
+            user_table.add_widget(Label(
+                text=username_text,
+                halign='center',
+                valign='middle',
+                text_size=(grid_width * col_widths_ratio['username'], None),
+                color=(0, 0, 0, 1),
+                size_hint_x=col_widths_ratio['username']
+            ))
 
-        # Define headers for the table
-        headers = ["Username", "Name", "Email", "Last Login", "Status"]
+            user_table.add_widget(Label(
+                text=login_time_text,
+                halign='center',
+                valign='middle',
+                text_size=(grid_width * col_widths_ratio['login_time'], None),
+                color=(0, 0, 0, 1),
+                size_hint_x=col_widths_ratio['login_time']
+            ))
 
-        # Add header labels with specific styling
-        for header_text in headers:
-            header_label = Label(
-                text=header_text,
-                bold=True,
-                color=(0, 0, 0, 1), # Black text for headers
-                size_hint_y=None,
-                height=dp(40) # Ensure header height matches row_default_height
-            )
-            # Add a light grey background to the header cells
-            with header_label.canvas.before:
-                Color(0.85, 0.85, 0.85, 1) # Light grey background
-                Rectangle(pos=header_label.pos, size=header_label.size)
-            table_layout.add_widget(header_label)
+            user_table.add_widget(Label(
+                text=role_text,
+                halign='center',
+                valign='middle',
+                text_size=(grid_width * col_widths_ratio['role'], None),
+                color=(0, 0, 0, 1),
+                size_hint_x=col_widths_ratio['role']
+            ))
 
-        # Add user data rows
-        for user in self.users:
-            # Use the make_label helper, ensuring text color is black
-            table_layout.add_widget(self.make_label(user.get("username", "")))
-            table_layout.add_widget(self.make_label(user.get("name", "")))
-            table_layout.add_widget(self.make_label(user.get("email", "")))
-            table_layout.add_widget(self.make_label(user.get("last_login", "")))
-            table_layout.add_widget(self.make_label(user.get("status", "")))
-
-        # Crucial for ScrollView: Update the GridLayout's height to its minimum required height
-        # This makes the ScrollView functional when content exceeds visible area.
-        table_layout.height = table_layout.minimum_height
-
-    def make_label(self, text):
-        """
-        Helper function to create a Label with consistent styling for table cells.
-        """
-        return Label(
-            text=text,
-            size_hint_y=None,
-            height=dp(40), # Match row_default_height from KV
-            color=(0, 0, 0, 1) # Black text for data cells
-        )
-
-    def logout(self):
-        """
-        Handles the logout action.
-        Navigates back to the login screen.
-        """
-        self.show_message("Logout", "Logging out...")
-        # Assuming 'login' is the name of your login screen in the ScreenManager
-        if self.manager:
-            self.manager.current = "login"
-        else:
-            print("Error: ScreenManager not found for logout.")
-
+            user_table.add_widget(Label(
+                text=status_text,
+                halign='center',
+                valign='middle',
+                text_size=(grid_width * col_widths_ratio['status'], None),
+                color=(0, 0, 0, 1),
+                size_hint_x=col_widths_ratio['status']
+            ))
 
     def export_users(self):
         """
-        Exports the current user data to a CSV file.
+        Exports user data to a CSV file in Downloads folder on Android.
         """
-        if not self.users:
-            self.show_message("Export Failed", "No user data available to export.")
-            return
-
-        # Define the file path for the CSV.
-        # In a production app, you might want to use a FileChooserPopup
-        # to let the user select the save location.
-        file_path = "exported_user_data.csv"
-
         try:
-            # Determine fieldnames from the first user dictionary's keys
-            # or explicitly define them if you have a fixed schema.
-            # Using a fixed schema is safer for CSV export.
-            fieldnames = ["username", "name", "email", "last_login", "status"]
+            users_data = fetch_logged_in_users()
+            fieldnames = ['username', 'login_time']
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"exported_users_{timestamp}.csv"
 
-            with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+            # Determine export path (Android or fallback)
+            if primary_external_storage_path:
+                downloads_dir = os.path.join(primary_external_storage_path(), "Download")
+            else:
+                downloads_dir = os.path.join(os.getcwd(), "exports")
+
+            if not os.path.exists(downloads_dir):
+                os.makedirs(downloads_dir)
+
+            filepath = os.path.join(downloads_dir, filename)
+
+            with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(users_data)
 
-                writer.writeheader() # Write the header row
-                for user in self.users:
-                    # Write each user dictionary as a row
-                    writer.writerow(user)
+            self.show_popup("Success", f"File exported to:\n{filepath}")
 
-            self.show_message("Export Successful", f"User data exported to:\n{file_path}")
-            print(f"User data exported to {file_path}")
-
-        except IOError as e:
-            self.show_message("Export Error", f"Could not write to file:\n{e}")
-            print(f"Error writing CSV file: {e}")
         except Exception as e:
-            self.show_message("Export Error", f"An unexpected error occurred:\n{e}")
-            print(f"An unexpected error occurred during export: {e}")
+            self.show_popup("Export Error", f"An error occurred:\n{e}")
+            import traceback
+            traceback.print_exc()
 
-    def show_message(self, title, message):
+    def logout(self):
         """
-        Displays a custom message popup to the user.
-        Replaces alert() or print() for user feedback.
-        Updated: Text color is white, background color is black.
+        Logs out the admin and navigates back to login screen.
         """
-        content = BoxLayout(orientation='vertical', padding=dp(10), spacing=dp(10))
-        # Set the background color of the content BoxLayout to black
-        with content.canvas.before:
-            Color(0, 0, 0, 1)  # Black background
-            Rectangle(pos=content.pos, size=content.size)
+        self.manager.current = "login"
 
-        content.add_widget(Label(text=message, color=(1,1,1,1), halign='center', valign='middle')) # White text
-        close_button = Button(text="OK", size_hint_y=None, height=dp(40))
-        content.add_widget(close_button)
+    def show_popup(self, title, message):
+        """
+        Displays a popup with custom message.
+        """
+        layout = BoxLayout(orientation='vertical', spacing=dp(10), padding=dp(10))
 
-        popup = Popup(title=title, content=content, size_hint=(0.7, 0.4),
-                      auto_dismiss=False)
-        # Set the popup's background color if needed (title bar is separate)
-        # For a completely black popup, you might also need to style the title bar
-        # For now, the content area will be black.
-        close_button.bind(on_release=popup.dismiss)
+        msg_label = Label(
+            text=message,
+            halign='center',
+            valign='middle',
+            size_hint_y=None,
+            height=dp(80)
+        )
+        msg_label.bind(width=lambda instance, value:
+                       setattr(instance, 'text_size', (value, None)))
+
+        layout.add_widget(msg_label)
+
+        close_button = Button(text="OK", size_hint=(1, 0.3))
+        layout.add_widget(close_button)
+
+        popup = Popup(title=title, content=layout,
+                      size_hint=(None, None), size=(dp(300), dp(200)), auto_dismiss=False)
+        close_button.bind(on_press=popup.dismiss)
         popup.open()
-
-
-# Example of how to run this screen in a full Kivy App
-# (This part would typically be in your main.py or app.py)
-if __name__ == '__main__':
-    from kivy.app import App
-    from kivy.uix.screenmanager import ScreenManager
-
-    class TestApp(App):
-        def build(self):
-            sm = ScreenManager()
-            # It's important that the name 'login' matches what your logout function expects
-            # and that 'admin_dashboard' matches the name used to navigate to this screen.
-            sm.add_widget(Screen(name='login')) # Dummy login screen
-            sm.add_widget(AdminDashboard(name='admin_dashboard'))
-            sm.current = 'admin_dashboard' # Start on the admin dashboard for testing
-            return sm
-
-    TestApp().run()
