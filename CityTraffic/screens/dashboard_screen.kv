@@ -6,17 +6,16 @@
         BoxLayout:
             orientation: 'vertical'
             size_hint_x: None
-            width: dp(200) # Slightly wider sidebar for better button fit
-            padding: dp(15) # Increased padding
-            spacing: dp(20) # Increased spacing between buttons
+            width: dp(200)
+            padding: dp(15)
+            spacing: dp(20)
 
             canvas.before:
                 Color:
-                    rgba: 0.95, 0.95, 0.95, 1 # Light gray background for sidebar
+                    rgba: 0.95, 0.95, 0.95, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
-                # Optional: Add a subtle border to the right of the sidebar
                 Color:
                     rgba: 0.8, 0.8, 0.8, 1
                 Rectangle:
@@ -25,36 +24,32 @@
 
             # --- Navigation Buttons ---
             Button:
-                id: check_traffic_btn # Added ID for potential future reference
+                id: check_traffic_btn
                 text: "Check Traffic"
                 size_hint_y: None
-                height: dp(55) # Slightly taller buttons
-                background_color: 0.68, 0.85, 0.90, 1 # Default light blue
+                height: dp(55)
+                background_color: 0.68, 0.85, 0.90, 1
                 background_normal: ''
                 color: 0, 0, 0, 1
                 font_size: '18sp'
-                bold: True # Make text bold
+                bold: True
                 on_release: root.manager.current='check_traffic'
-                # Removed: on_enter: self.background_color = (0.5, 0.75, 0.85, 1)
-                # Removed: on_leave: self.background_color = (0.68, 0.85, 0.90, 1)
                 canvas.before:
                     Color:
                         rgba: self.background_color
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [dp(10),] # More rounded corners
-                    # Subtle shadow
+                        radius: [dp(10),]
                     Color:
-                        rgba: 0, 0, 0, 0.2 # Black with 20% opacity
+                        rgba: 0, 0, 0, 0.2
                     RoundedRectangle:
-                        pos: self.x + dp(2), self.y - dp(2) # Offset for shadow effect
+                        pos: self.x + dp(2), self.y - dp(2)
                         size: self.width, self.height
                         radius: [dp(10),]
 
-
             Button:
-                id: shortest_path_btn # Added ID
+                id: shortest_path_btn
                 text: "Shortest Path"
                 size_hint_y: None
                 height: dp(55)
@@ -64,8 +59,6 @@
                 font_size: '18sp'
                 bold: True
                 on_release: root.manager.current='shortest_path'
-                # Removed: on_enter: self.background_color = (0.5, 0.75, 0.85, 1)
-                # Removed: on_leave: self.background_color = (0.68, 0.85, 0.90, 1)
                 canvas.before:
                     Color:
                         rgba: self.background_color
@@ -80,24 +73,22 @@
                         size: self.width, self.height
                         radius: [dp(10),]
 
-            # Spacer to push the Logout button to the bottom of the sidebar
+            # Spacer
             Widget:
                 size_hint_y: 1
 
-            # Logout Button
+            # Toggle Notification Button
             Button:
-                id: logout_btn # Added ID
-                text: "Logout"
+                id: notification_btn
+                text: "Enable Notifications" if not app.notifications_enabled else "Disable Notifications"
                 size_hint_y: None
                 height: dp(55)
-                background_color: 0.8, 0.2, 0.2, 1 # Red color for logout
+                background_color: (0.2, 0.6, 0.2, 1) if not app.notifications_enabled else (0.8, 0.2, 0.2, 1)
                 background_normal: ''
-                color: 1, 1, 1, 1 # White text
+                color: 1, 1, 1, 1
                 font_size: '18sp'
                 bold: True
-                on_release: root.logout()
-                # Removed: on_enter: self.background_color = (0.9, 0.3, 0.3, 1)
-                # Removed: on_leave: self.background_color = (0.8, 0.2, 0.2, 1)
+                on_release: app.ask_notification_permission()
                 canvas.before:
                     Color:
                         rgba: self.background_color
@@ -112,6 +103,31 @@
                         size: self.width, self.height
                         radius: [dp(10),]
 
+            # Logout Button
+            Button:
+                id: logout_btn
+                text: "Logout"
+                size_hint_y: None
+                height: dp(55)
+                background_color: 0.8, 0.2, 0.2, 1
+                background_normal: ''
+                color: 1, 1, 1, 1
+                font_size: '18sp'
+                bold: True
+                on_release: root.logout()
+                canvas.before:
+                    Color:
+                        rgba: self.background_color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(10),]
+                    Color:
+                        rgba: 0, 0, 0, 0.2
+                    RoundedRectangle:
+                        pos: self.x + dp(2), self.y - dp(2)
+                        size: self.width, self.height
+                        radius: [dp(10),]
 
         # Main Content Area
         BoxLayout:
@@ -121,7 +137,7 @@
 
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1 # White background for main content
+                    rgba: 1, 1, 1, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -137,15 +153,14 @@
                 color: 0.1, 0.1, 0.1, 1
                 canvas.before:
                     Color:
-                        rgba: 0.95, 0.95, 0.95, 1 # Light gray background for this label
+                        rgba: 0.95, 0.95, 0.95, 1
                     Rectangle:
                         pos: self.pos
                         size: self.size
 
             Widget:
-                size_hint_y: 1 # Spacer
+                size_hint_y: 1
 
-            # First Image
             Image:
                 source: 'assets/traffic.jpg'
                 size_hint: (1, None)
@@ -163,7 +178,6 @@
                 text_size: self.width, None
                 color: 0.1, 0.1, 0.1, 1
 
-            # Second Image
             Image:
                 source: 'assets/shortest.jpg'
                 size_hint: (1, None)
@@ -172,4 +186,4 @@
                 keep_ratio: True
 
             Widget:
-                size_hint_y: 1 # Spacer
+                size_hint_y: 1

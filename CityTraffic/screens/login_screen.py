@@ -1,40 +1,6 @@
-'''
-from kivy.uix.screenmanager import Screen
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-
-class LoginScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        layout = BoxLayout(orientation='vertical')
-
-        self.username_input = TextInput(hint_text="Username")
-        layout.add_widget(self.username_input)
-
-        self.password_input = TextInput(hint_text="Password", password=True)
-        layout.add_widget(self.password_input)
-
-        login_button = Button(text="Login")
-        login_button.bind(on_press=self.on_login)  # Bind the login button to a function
-        layout.add_widget(login_button)
-
-        self.add_widget(layout)
-
-    def on_login(self, instance):
-        # Here you can validate username and password or navigate to the dashboard
-        # For now, let's just switch to the dashboard screen
-        self.manager.current = "dashboard"  # Switch to the dashboard screen
-
-'''
-'''
-kwargs is used to pass the numbers of different types of variables to the function
-
-'''
-
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
-from db_handler import get_user, verify_password,update_last_login
+from db_handler import get_user, verify_password, update_last_login
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
@@ -42,16 +8,15 @@ from kivy.uix.button import Button
 from datetime import datetime
 
 
-Builder.load_file("screens/logic_screen.kv")
-# The above line loads the kv file for the login screen
+Builder.load_file("screens/logic_screen.kv")  # Loads the login KV file
 
 class LoginScreen(Screen):
 
     def login(self):
-        username = self.ids.username.text.strip() # strip removes the whitespaces and returns the characters
+        username = self.ids.username.text.strip()
         password = self.ids.password.text.strip()
 
-        if username== "admin":
+        if username == "admin":
             admin_password = "admin123"
             if password == admin_password:
                 self.manager.current = "admin_dashboard"
@@ -59,17 +24,19 @@ class LoginScreen(Screen):
             else:
                 self.show_popup("Error", "Invalid admin password.")
                 return
-            
+
         stored_hash = get_user(username)
         if stored_hash and verify_password(stored_hash, password):
-            # Update last login time
-            now_str=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # ✅ Update last login time
+            now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             update_last_login(username, now_str)
-            
+
+       
+
+            # ✅ Navigate to dashboard
             self.manager.current = "dashboard"
         else:
             self.show_popup("Error", "Invalid username or password.")
-    
 
     def go_to_register(self):
         self.manager.current = "register"
@@ -85,6 +52,3 @@ class LoginScreen(Screen):
                       size_hint=(None, None), size=(300, 200), auto_dismiss=False)
         close_button.bind(on_press=popup.dismiss)
         popup.open()
-
-   
-
