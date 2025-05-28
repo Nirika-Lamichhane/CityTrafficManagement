@@ -16,7 +16,7 @@ city_map = {
 }
 
 
-
+print("this is the map")
 
 # city map is a dictionary where each key is a city eg thamel lazimpat of the lhs side and the value is a list of tuples i.e. after =
 # tuple is in the form of minutes and distance in km
