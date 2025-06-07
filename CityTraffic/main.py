@@ -53,3 +53,7 @@ class CityTrafficApp(App):
 
 if __name__ == '__main__':
     CityTrafficApp().run()
+# this is my project on kivyyyyyy 
+'''
+i am trying to check the new 
+'''
